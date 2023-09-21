@@ -8,4 +8,4 @@ RUN cd /root/data && bash download_datasets.sh
 COPY deps/ldbc_finbench_driver /root/ldbc/
 COPY deps/ldbc_finbench_transaction_impls /root/ldbc/
 
-RUN cd /root/ldbc && 
+RUN cd /root/ldbc/ldbc_finbench_driver && mvn clean install && cd /root/ldbc/ldbc_finbench_transaction_impls/tugraph && mvn clean package
