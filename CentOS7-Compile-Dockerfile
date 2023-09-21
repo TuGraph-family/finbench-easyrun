@@ -2,8 +2,10 @@ FROM tugraph/tugraph-compile-centos7:latest
 
 RUN mkdir /root/data && mkdir /root/ldbc
 
-WORKDIR /root/
-
 COPY download_datasets.sh /root/data/
+RUN cd /root/data && bash download_datasets.sh
 
-RUN cd data && bash download_datasets.sh
+COPY deps/ldbc_finbench_driver /root/ldbc/
+COPY deps/ldbc_finbench_transaction_impls /root/ldbc/
+
+RUN cd /root/ldbc && 
