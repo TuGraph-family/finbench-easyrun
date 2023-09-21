@@ -1,0 +1,9 @@
+FROM tugraph/tugraph-compile-centos7:latest
+
+RUN mkdir /root/data && mkdir /root/ldbc
+
+WORKDIR /root/
+
+COPY download_datasets.sh /root/data/
+
+RUN cd data && bash download_datasets.sh
