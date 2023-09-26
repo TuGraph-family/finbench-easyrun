@@ -1,6 +1,12 @@
 [submodule "deps/ldbc_finbench_driver"]
 	path = deps/ldbc_finbench_driver
 	url = https://github.com/ldbc/ldbc_finbench_driver.git
+	branch = master
 [submodule "deps/ldbc_finbench_transaction_impls"]
 	path = deps/ldbc_finbench_transaction_impls
 	url = https://github.com/TuGraph-family/ldbc_finbench_transaction_impls.git
+	branch = dev_tugraph
+[submodule "deps/tugraph-db"]
+	path = deps/tugraph-db
+	url = https://github.com/TuGraph-family/tugraph-db.git
+	branch = finbench

@@ -1,11 +1,21 @@
 FROM tugraph/tugraph-compile-centos7:latest
 
-RUN mkdir /root/data && mkdir /root/ldbc
+ARG JFLAG=-j48
 
-COPY download_datasets.sh /root/data/
-RUN cd /root/data && bash download_datasets.sh
+RUN yum install -y vim
+RUN cd /root/ && mkdir .m2 data ldbc tugraph
 
+# copy datasets and projects
+COPY datasets /root/data/
+COPY maven-settings.xml /root/.m2/settings.xml
 COPY deps/ldbc_finbench_driver /root/ldbc/
 COPY deps/ldbc_finbench_transaction_impls /root/ldbc/
+COPY deps/tugraph-db /root/tugraph/
 
-RUN cd /root/ldbc/ldbc_finbench_driver && mvn clean install && cd /root/ldbc/ldbc_finbench_transaction_impls/tugraph && mvn clean package
+# install tugraph
+RUN cd /root/tugraph/tugraph-db && mkdir build && cd build \
+     && cmake .. -DCMAKE_BUILD_TYPE=Coverage && make install ${JFLAG}
+# compile benchmark suite
+RUN cd /root/ldbc/ldbc_finbench_driver && mvn clean install \
+    && cd /root/ldbc/ldbc_finbench_transaction_impls/tugraph \
+    && mvn clean package
