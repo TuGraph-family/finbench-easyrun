@@ -1,1 +1,1 @@
-docker build . -f CentOS7-Compile-Dockerfile  -t tugraph/bdci-tugraph-db-finbench:tmp
+docker build . -f CentOS8-Compile-Dockerfile  -t tugraph/bdci-tugraph-db-finbench:cent8
