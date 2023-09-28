@@ -1,4 +1,4 @@
-OSS_PREFIX=https://tugraph-web.oss-cn-beijing.aliyuncs.com/tugraph/datasets/finbench/v0.1.0
+OSS_PREFIX=https://tugraph-web.oss-cn-beijing.aliyuncs.com/tugraph/datasets/bdci
 
 function download_and_check() {
     if [ -f datasets/$1 ]; then
@@ -10,10 +10,8 @@ function download_and_check() {
     cd datasets/ && md5sum -c $1.md5sum && cd ..
 }
 
-# set -x
+set -x
 
-download_and_check sf1_read_params.zip
-download_and_check sf10_read_params.zip
-download_and_check sf1.tar.gz
-download_and_check sf10.tar.gz
+download_and_check sf1_withparams.tar.gz
+download_and_check sf10_withparams.tar.gz
 download_and_check validation_params.csv.sf1.20230605

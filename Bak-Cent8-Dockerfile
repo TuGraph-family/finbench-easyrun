@@ -19,7 +19,7 @@ COPY deps/tugraph-db /root/tugraph/tugraph-db
 RUN cd /root/tugraph/tugraph-db && mkdir build && cd build \
      && cmake .. -DCMAKE_BUILD_TYPE=Coverage && make install ${JFLAG}
      
-# compile benchmark suite
+# compile benchmark suite 
 RUN cd /root/ldbc/ldbc_finbench_driver && mvn clean install \
      && cd /root/ldbc/ldbc_finbench_transaction_impls/tugraph \
      && mvn clean package
@@ -42,12 +42,18 @@ RUN cd /root/ldbc/ldbc_finbench_transaction_impls/tugraph/data \
      && bash /root/ldbc/ldbc_finbench_transaction_impls/tugraph/scripts/import_data.sh sf10 \
      && cd /data/ && mv lgraph_db lgraph_db_sf10
 
-# start lgraph server and load procedures
-RUN lgraph_server --directory /data/lgraph_db_sf1 --log_dir /data/lgraph_log -d start \
-     && bash /root/ldbc/ldbc_finbench_transaction_impls/tugraph/scripts/build_procedure.sh \
-     && bash /root/ldbc/ldbc_finbench_transaction_impls/tugraph/scripts/load_procedure.sh
-
+# update benchmark run configs
 RUN cd /root/ldbc/ldbc_finbench_transaction_impls/tugraph/ \
      && cp /data/validation_params.csv.sf1.20230605 validation_params.csv \
      && sed -i 's/172.21.189.228/127.0.0.1/g'  validate_database.properties \
      && sed -i 's/172.21.189.228/127.0.0.1/g'  benchmark.properties
+
+# TODO: figure out the reason connection timeouts
+# start lgraph server and load procedures
+# RUN bash /root/ldbc/ldbc_finbench_transaction_impls/tugraph/scripts/build_procedure.sh \
+#      && lgraph_server --directory /data/lgraph_db_sf1 --port 7070 --log_dir /data/lgraph_log -d start \
+#      && bash /root/ldbc/ldbc_finbench_transaction_impls/tugraph/scripts/load_procedure.sh \
+#      && lgraph_server -d stop \
+#      && lgraph_server --directory /data/lgraph_db_sf10 --log_dir /data/lgraph_log -d start \
+#      && sleep 2 && bash /root/ldbc/ldbc_finbench_transaction_impls/tugraph/scripts/load_procedure.sh \
+#      && lgraph_server -d stop
