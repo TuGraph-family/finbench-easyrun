@@ -1,0 +1,21 @@
+version: "3"
+services:
+
+  tugraph:
+    image: tugraph/tugraph-bdci-tugraphdb:cent8
+    command: tail -f
+    volumes:
+      - ./datasets:/root/datasets/
+      - ./scripts:/root/scripts/
+    expose:
+      - 7070
+      - 9090
+
+  finbench:
+    depends_on:
+      - tugraph
+    image: tugraph/tugraph-bdci-finbench:cent8
+    command: tail -f
+    volumes:
+      - ./datasets:/root/datasets/
+      - ./scripts:/root/scripts/
