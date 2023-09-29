@@ -7,9 +7,6 @@ services:
     volumes:
       - ./datasets:/root/datasets/
       - ./scripts:/root/scripts/
-    # restart: always
-    # environment:
-    #   MYSQL_ROOT_PASSWORD: somewordpress
     expose:
       - 7070
       - 9090
@@ -22,10 +19,3 @@ services:
     volumes:
       - ./datasets:/root/datasets/
       - ./scripts:/root/scripts/
-    # ports:
-    #   - "8000:80"
-    # restart: always
-    # environment:
-    #   WORDPRESS_DB_HOST: db:3306
-    #   WORDPRESS_DB_USER: wordpress
-    #   WORDPRESS_DB_PASSWORD: wordpress
