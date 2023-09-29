@@ -13,6 +13,5 @@ RUN cd /root/ldbc/ldbc_finbench_driver && mvn clean install \
      && cd /root/ldbc/ldbc_finbench_transaction_impls/tugraph \
      && mvn clean package \
      && cd /root/ldbc/ldbc_finbench_transaction_impls/tugraph/ \
-     && cp /data/validation_params.csv.sf1.20230605 validation_params.csv \
      && sed -i 's/172.21.189.228/127.0.0.1/g'  validate_database.properties \
      && sed -i 's/172.21.189.228/127.0.0.1/g'  benchmark.properties

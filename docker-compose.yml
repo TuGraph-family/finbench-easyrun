@@ -3,28 +3,29 @@ services:
 
   tugraph:
     image: tugraph/tugraph-bdci-tugraphdb:cent8
-    command:
-      - --default_authentication_plugin=mysql_native_password
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
+    command: tail -f
     volumes:
-      - db_data:/var/lib/mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: somewordpress
+      - ./datasets:/root/datasets/
+      - ./scripts:/root/scripts/
+    # restart: always
+    # environment:
+    #   MYSQL_ROOT_PASSWORD: somewordpress
     expose:
+      - 7070
       - 9090
 
   finbench:
     depends_on:
       - tugraph
-    image: wordpress:latest
-    ports:
-      - "8000:80"
-    restart: always
-    environment:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
-volumes:
-  db_data:
+    image: tugraph/tugraph-bdci-finbench:cent8
+    command: tail -f
+    volumes:
+      - ./datasets:/root/datasets/
+      - ./scripts:/root/scripts/
+    # ports:
+    #   - "8000:80"
+    # restart: always
+    # environment:
+    #   WORDPRESS_DB_HOST: db:3306
+    #   WORDPRESS_DB_USER: wordpress
+    #   WORDPRESS_DB_PASSWORD: wordpress
