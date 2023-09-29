@@ -11,7 +11,4 @@ COPY deps/ldbc_finbench_transaction_impls /root/ldbc/ldbc_finbench_transaction_i
 # compile benchmark suite and modify configs
 RUN cd /root/ldbc/ldbc_finbench_driver && mvn clean install \
      && cd /root/ldbc/ldbc_finbench_transaction_impls/tugraph \
-     && mvn clean package \
-     && cd /root/ldbc/ldbc_finbench_transaction_impls/tugraph/ \
-     && sed -i 's/172.21.189.228/127.0.0.1/g'  validate_database.properties \
-     && sed -i 's/172.21.189.228/127.0.0.1/g'  benchmark.properties
+     && mvn clean package 

@@ -10,3 +10,5 @@ done
 for i in tcr8; do
     python3 install.py $ENDPOINT $i RO
 done
+
+cd $SCRIPT_DIR
