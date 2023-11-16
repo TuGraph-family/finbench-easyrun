@@ -30,27 +30,25 @@ docker-compose up -d
 - finbench-easyrun_tugraph_1
 - finbench-easyrun_finbench_1
 
-#### 安装Cpp插件
-
-载`finbench-easyrun_finbench_1`容器的`/root/scripts`目录下，执行`load_procedure.sh`
-
 至此，准备工作完毕
 
 ### 功能验证部分
 
-数据正确下载后，开始进行功能验证。功能验证基于SF1数据集，需要使用如下脚本
+数据正确下载后，开始进行功能验证。功能验证基于小规模SF1数据集，需要使用如下脚本
 
-- 在`finbench-easyrun_tugraph_1`容器的`/root/scripts`目录下，执行`sf1_import.sh`
-- 在`finbench-easyrun_tugraph_1`容器的`/root/scripts`目录下，执行`sf1_start.sh`
-- 在`finbench-easyrun_finbench_1`容器的`/root/scripts`目录下，执行`sf1_validate.sh`
+- 导入小规模数据：在`finbench-easyrun_tugraph_1`容器的`/root/scripts`目录下，执行`sf1_import.sh`
+- 启动tugraph_server：在`finbench-easyrun_tugraph_1`容器的`/root/scripts`目录下，执行`sf1_start.sh`
+- 安装Cpp插件：在`finbench-easyrun_finbench_1`容器的`/root/scripts`目录下，执行`load_procedure.sh`
+- 进行功能验证：在`finbench-easyrun_finbench_1`容器的`/root/scripts`目录下，执行`sf1_validate.sh`
 
 ### 性能验证部分
 
-性能验证基于SF1数据集，需要使用如下脚本
+性能验证基于大规模SF10数据集，需要使用如下脚本
 
-- 在`finbench-easyrun_tugraph_1`容器的`/root/scripts`目录下，执行`sf10_import.sh`
-- 在`finbench-easyrun_tugraph_1`容器的`/root/scripts`目录下，执行`sf10_start.sh`
-- 在`finbench-easyrun_finbench_1`容器的`/root/scripts`目录下，执行`sf10_benchmark.sh`
+- 导入大规模数据：在`finbench-easyrun_tugraph_1`容器的`/root/scripts`目录下，执行`sf10_import.sh`
+- 启动tugraph_server：在`finbench-easyrun_tugraph_1`容器的`/root/scripts`目录下，执行`sf10_start.sh`
+- 安装Cpp插件：在`finbench-easyrun_finbench_1`容器的`/root/scripts`目录下，执行`load_procedure.sh`
+- 进行性能测试：在`finbench-easyrun_finbench_1`容器的`/root/scripts`目录下，执行`sf10_benchmark.sh`
 
 ## 关于Docker构建
 
