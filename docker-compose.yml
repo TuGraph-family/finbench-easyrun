@@ -4,6 +4,7 @@ services:
   tugraph:
     image: tugraph/tugraph-bdci-tugraphdb:cent8
     command: tail -f
+    tty: true
     volumes:
       - ./datasets:/root/datasets/
       - ./scripts:/root/scripts/
@@ -16,6 +17,7 @@ services:
       - tugraph
     image: tugraph/tugraph-bdci-finbench:cent8
     command: tail -f
+    tty: true
     volumes:
       - ./datasets:/root/datasets/
       - ./scripts:/root/scripts/
