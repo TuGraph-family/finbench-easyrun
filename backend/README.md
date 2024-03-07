@@ -1,5 +1,5 @@
 # finbench easyrun
 
-## frontend
+## backend
 
-This is the frontend resources directory to run finench easily. 
+This is the backend resources directory to run finench easily. 
