@@ -29,3 +29,6 @@ interface ValidateInfo {
 }
 
 export type ModeInfo = BenchmarkInfo | ValidateInfo;
+
+// 数据列表
+export  type DataList = Array<string>

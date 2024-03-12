@@ -82,7 +82,6 @@
 import { ref, reactive } from 'vue'
 import { useRunviewStore } from '../stores/runview'
 import type { SystemInfo } from '../type'
-import { ElMessageBox } from 'element-plus'
 const runviewStore = useRunviewStore()
 const dialogVisible = ref(false)
 const systemInfo = reactive<SystemInfo>({
@@ -136,7 +135,7 @@ function openDialog() {
 
     &-img {
         width: 100px;
-        height: 110px;
+        height: 100px;
         background-image: url('../assets/system.png');
         background-size: contain;
         background-repeat: no-repeat;

@@ -31,7 +31,7 @@ import ModeInfo from '@/components/ModeInfo.vue';
   >div {
     flex: 1;
     margin-right: 20px;
-    height: 300px;
+    height: 270px;
     border: 5px solid #ddd;
     border-radius: 8px;
   }

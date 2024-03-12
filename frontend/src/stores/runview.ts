@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
-import type { SystemInfo, DataInfo, ModeInfo } from '../type'
+import type { SystemInfo, DataInfo, ModeInfo,DataList } from '../type'
 
 interface State {
   systemInfo: SystemInfo;
   dataInfo: DataInfo,
   modeInfo: ModeInfo,
-  dataList: Array<string>;
+  dataList: DataList;
 }
 
 export const useRunviewStore = defineStore('runview', {

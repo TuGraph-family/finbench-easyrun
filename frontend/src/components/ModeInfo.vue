@@ -30,5 +30,7 @@
         background-image: url('../assets/mode.png');
         background-size: contain;
     }
+
+
 }
 </style>
