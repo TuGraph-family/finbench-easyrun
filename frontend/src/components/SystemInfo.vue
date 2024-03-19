@@ -2,7 +2,7 @@
     <div class="finbech-systeminfo">
         <div class="finbech-systeminfo-title">系统配置
 
-            <el-icon @click="openDialog">
+            <el-icon @click="openDialog" style="color: #fff;">
                 <Setting />
             </el-icon>
         </div>

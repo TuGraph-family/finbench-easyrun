@@ -11,22 +11,48 @@
                 </el-select>
             </div>
             <div class="btn-load-data">
-                <el-button>加载数据</el-button>
+                <el-button @click="loadData" :disabled="runviewStore.dataLoad === true">
+                    <span v-if="!runviewStore.dataLoad">请先加载数据</span>
+                    <span v-else>数据加载完成</span>
+                </el-button>
             </div>
             <div class="btn-start-system">
-                <el-button>启动系统</el-button>
+                <el-button v-if="runviewStore.systemStatus.status === 'stop'" :disabled="!runviewStore.dataLoad"
+                    @click="startSut">启动系统</el-button>
+                <el-button v-else :disabled="runviewStore.systemStatus.status === 'start'"
+                    @click="startSut">系统已启动</el-button>
             </div>
         </div>
-
-
     </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRunviewStore } from '@/stores/runview';
-const data = ref('')
 const runviewStore = useRunviewStore()
+const data = ref('')
+data.value = runviewStore.dataInfo.data
+// 获取可用数据集
+runviewStore.getListDataset()
+// 监听 data 的变化，并更新 Pinia store 中的 dataInfo.data
+watch(data, (newValue) => {
+    runviewStore.updateDataInfo({ data: newValue })
+    runviewStore.updateLoadData(false)
+    runviewStore.updateSystemStatus({ uuid: '', status: 'stop' })
+    runviewStore.updateProgressResult({ status: '', duration: 0, progress: 0 })
+})
 
+async function loadData() {
+    let res: string = await runviewStore.runLoadDatase()
+    if (res === 'ok') {
+        runviewStore.updateLoadData(true)
+    }
+
+}
+
+async function startSut() {
+    let res = await runviewStore.startSut()
+    runviewStore.updateSystemStatus({ uuid: res.uuid, status: 'start' })
+}
 </script>
 
 <style scoped lang="less">
@@ -44,8 +70,8 @@ const runviewStore = useRunviewStore()
         display: grid;
         grid-template-columns: 100px auto;
         column-gap: 20px;
-        row-gap: 10px;
         padding: 10px;
+        row-gap: 10px;
     }
 
     &-img {

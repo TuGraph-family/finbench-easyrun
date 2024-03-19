@@ -32,3 +32,51 @@ export type ModeInfo = BenchmarkInfo | ValidateInfo;
 
 // 数据列表
 export  type DataList = Array<string>
+
+
+// 进度结果
+
+export type ProgressResult =  {
+    "status":string,
+    "duration":number,
+    "progress":number
+}
+
+// 系统状态
+
+export type SystemStatus = {
+    "uuid":string,
+    "status":string,
+}
+
+// 测试结果
+interface Detail {
+    "name": string,
+    "unit": string,
+    "count": number,
+    "run_time": {
+        "name": string,
+        "unit": string,
+        "count": number,
+        "mean": number,
+        "min": number,
+        "max": number,
+        "25th_percentile": number,
+        "50th_percentile": number,
+        "75th_percentile": number,
+        "90th_percentile": number,
+        "95th_percentile": number,
+        "99th_percentile": number,
+        "99.9th_percentile": number,
+        "std_dev": number
+    }
+}
+
+export interface FinResult {
+    "duration": number,
+    "warmup": number,
+    "ops": number,
+    "query_on_time": number,
+    "throughput": number,
+    "detail":Array<Detail>
+}
