@@ -5,14 +5,10 @@
                 <el-tab-pane label="性能测试结果">
                     <div class="res-1">
                         <div class="left">
-                            <div>测试耗时：{{ result?.duration }} </div>
-                            <div>热身查询数：{{ result?.warmup }}</div>
-                            <div>总查询数：{{ result?.ops }} </div>
-                            <div>及时率：{{ result?.query_on_time }} </div>
-                            <div>性能吞吐：{{ result?.throughput }} </div>
+                            <Performance />
                         </div>
-                        <div class="right" ref="">
-
+                        <div class="right">
+                            <Pie />
                         </div>
                     </div>
                 </el-tab-pane>
@@ -34,13 +30,15 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
 import { useRunviewStore } from '@/stores/runview';
-import * as echarts from 'echarts';
-var myChart = echarts.init(document.getElementById('main'));
+import Performance from './Performance.vue'
+import Pie from './Pie.vue'
 const runviewStore = useRunviewStore()
 let result = computed(() => runviewStore.result)
 watch(result, () => {
     console.log(result)
 })
+
+
 
 </script>
 
@@ -51,37 +49,45 @@ watch(result, () => {
     .result {
         width: 100%;
         height: 100%;
-    }
 
-    .no-result {
-        text-align: center;
-        padding-top: 150px;
-    }
-
-
-    .el-tabs__content {
-        height: 100%;
-    }
-
-    .res-1 {
-        display: flex;
-
-        .left {
-            width: 200px;
-            margin-right: 20px;
+        .no-result {
+            text-align: center;
+            padding-top: 150px;
         }
-    }
 
-    .res-2 {
-        padding: 0 15px;
-        height: 100%;
 
-        .el-tabs {
+        .el-tabs__content {
             height: 100%;
-            border-radius: 5px;
         }
 
-    }
+        .res-1 {
+            display: flex;
 
+            .left {
+                width: 200px;
+                margin-right: 20px;
+            }
+
+            .right {
+                flex-grow: 1;
+
+                .pie {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+
+        .res-2 {
+            padding: 0 15px;
+            height: 100%;
+
+            .el-tabs {
+                height: 100%;
+                border-radius: 5px;
+            }
+
+        }
+    }
 }
 </style>
