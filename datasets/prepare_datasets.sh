@@ -1,4 +1,4 @@
-OSS_PREFIX=https://tugraph-web.oss-cn-beijing.aliyuncs.com/tugraph/bdci
+OSS_PREFIX=https://tugraph-web.oss-cn-beijing.aliyuncs.com/tugraph/datasets/bdci
 
 function download_and_check() {
     if [ -f $1 ]; then
