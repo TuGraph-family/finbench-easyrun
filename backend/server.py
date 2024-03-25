@@ -5,12 +5,15 @@
 @File    ：server
 '''
 
-from flask import Flask
+from flask import Flask, request
 
 import utils
 import os
+import subprocess
 
 app = Flask(__name__)
+
+current_dataset = None
 
 @app.route('/list_dataset')
 def list_dataset():
@@ -24,11 +27,30 @@ def list_dataset():
 
 @app.route('/load_dataset')
 def load_dataset():
-    return 'Welcome to the Flask Demo!'
+    dataset = request.args.get('dataset')
+    if dataset not in ['sf1', 'sf10']:
+        return {'status':'failed', 'message': 'Invalid dataset name'}
+    global current_dataset
+    current_dataset = dataset
+    logs = utils.load_dataset(dataset)
+    import_res = logs[-1].strip()
+    if 'Import finished' in import_res:
+        return {'status':'ok', 'message': ''}
+    else:
+        return {'status':'failed', 'message': '{}'.format(import_res)}
+        
 
 @app.route('/start_sut')
 def start_sut():
-    return 'Welcome to the Flask Demo!'
+    global current_dataset
+    if current_dataset is None:
+        return {'status':'failed', 'message': 'No dataset loaded'}
+    logs = utils.start_tugraph(current_dataset)
+    start_res = logs[-1].strip()
+    if 'The service process is started at' in start_res:
+        return {'status':'ok', 'message': ''}
+    else:
+        return {'status':'failed', 'message': '{}'.format(start_res)}
 
 @app.route('/start_test')
 def start_test():
