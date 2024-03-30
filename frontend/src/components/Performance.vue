@@ -22,5 +22,7 @@ let result = computed(() => runviewStore.result)
 .performance {
     height: 100%;
     width: 100%;
+    padding: 0 20px;
+    line-height: 40px;
 }
 </style>
