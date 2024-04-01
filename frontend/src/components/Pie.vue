@@ -13,9 +13,17 @@ let result = computed(() => runviewStore.result)
 let pieData: Array<any> = []
 let myChart: any = null
 watch(result, (newResult) => {
-    console.log(newResult)
+    draw()
+})
+onMounted(() => {
+    myChart = echarts.init(pieRef.value);
+    if (result) {
+        draw()
+    }
+})
+function draw() {
     pieData = []
-    newResult?.detail.forEach(item => {
+    result.value.detail.forEach(item => {
         let obj = {
             name: item.name,
             value: item.count
@@ -31,20 +39,20 @@ watch(result, (newResult) => {
             data: pieData
         }]
     });
-})
-onMounted(() => {
-    console.log(pieRef.value)
-    myChart = echarts.init(pieRef.value, {}, {
-        width: 500,
-        height: 350,
-    });
-})
+}
 
 </script>
 
 <style scoped lang="less">
 .pie {
-    width: 100%;
+    width: clac(100% - 20px);
+    height: 400px;
     text-align: center;
+    padding: 10px;
+
+    >#PieCanvas {
+        width: 100%;
+        height: 100%;
+    }
 }
 </style>

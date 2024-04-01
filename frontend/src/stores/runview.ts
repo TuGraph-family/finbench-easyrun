@@ -9,14 +9,14 @@ interface State {
   dataList: DataList;
   progressResult:ProgressResult,
   systemStatus:SystemStatus,
-  result?:FinResult
+  result:FinResult
 }
 
 export const useRunviewStore = defineStore('runview', {
   state: (): State => {
     // 尝试从 localStorage 中读取 systemInfo 数据
-    const storedSystemInfo = localStorage.getItem('graphbench_systemInfo');
-    const initialSystemInfo: SystemInfo = storedSystemInfo ? JSON.parse(storedSystemInfo) : {
+    let storedSystemInfo = localStorage.getItem('graphbench_systemInfo');
+    let initialSystemInfo: SystemInfo = storedSystemInfo ? JSON.parse(storedSystemInfo) : {
       model: '',
       os: '',
       cpu: '',
@@ -24,24 +24,31 @@ export const useRunviewStore = defineStore('runview', {
       storage: '',
       network: ''
     };
-    const storedDataInfo = localStorage.getItem('graphbench_dataInfo');
-    const initialDataInfo: DataInfo = storedDataInfo ? JSON.parse(storedDataInfo) : {
+    let storedDataInfo = localStorage.getItem('graphbench_dataInfo');
+    let initialDataInfo: DataInfo = storedDataInfo ? JSON.parse(storedDataInfo) : {
       data:''
     };
-    const storedModeInfo = localStorage.getItem('graphbench_modeInfo')
-    const initialModeInfo: ModeInfo = storedModeInfo ? JSON.parse(storedModeInfo) : {
+    let storedModeInfo = localStorage.getItem('graphbench_modeInfo')
+    let initialModeInfo: ModeInfo = storedModeInfo ? JSON.parse(storedModeInfo) : {
       mode:'validate'
     };
-    const sotreProgressResult = localStorage.getItem('graphbench_progressResult')
-    const initialProgressResult: ProgressResult = sotreProgressResult?JSON.parse(sotreProgressResult) : {
+    let sotreProgressResult = localStorage.getItem('graphbench_progressResult')
+    let initialProgressResult: ProgressResult = sotreProgressResult?JSON.parse(sotreProgressResult) : {
       uuid:'',
       status:'stop'
     };
-    const sotreSystemStatus = localStorage.getItem('graphbench_systemStatus')
-    const initialSystemStatus: SystemStatus = sotreSystemStatus?JSON.parse(sotreSystemStatus) : {
+    let sotreSystemStatus = localStorage.getItem('graphbench_systemStatus')
+    let initialSystemStatus: SystemStatus = sotreSystemStatus?JSON.parse(sotreSystemStatus) : {
       uuid:'',
       status:'stop'
     };
+    let result:any
+    if(initialProgressResult.status === 'finished'){
+      debugger
+      result =JSON.parse(localStorage.getItem('graphbench_result') as string) 
+    }else{
+      result = null
+    }
     return {
       systemInfo: initialSystemInfo,
       dataLoad:localStorage.graphbench_dataLoad === 'true'||false,
@@ -49,7 +56,8 @@ export const useRunviewStore = defineStore('runview', {
       modeInfo: initialModeInfo,
       progressResult:initialProgressResult,
       systemStatus:initialSystemStatus,
-      dataList: []
+      dataList: [],
+      result:result
     }
   },
   actions: {
@@ -100,7 +108,7 @@ export const useRunviewStore = defineStore('runview', {
     },
     updateResult(newResult:FinResult){
       this.result = newResult
-      console.log(newResult)
+      localStorage.setItem('graphbench_result',JSON.stringify(newResult))
     }
   }
 });

@@ -16,18 +16,29 @@
       <Progress />
     </div>
     <div class="run-result">
-      <Result />
+      <div v-if="proStatus === 'finished'">
+        <Result />
+      </div>
+      <div v-else>
+        暂无结果
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+
+import { ref, computed } from 'vue'
 import Header from '../components/Header.vue'
 import SystemInfo from '@/components/SystemInfo.vue';
 import DataInfo from '@/components/DataInfo.vue';
 import ModeInfo from '@/components/ModeInfo.vue';
 import Progress from '@/components/Progress.vue';
 import Result from '@/components/Result.vue';
+
+import { useRunviewStore } from '@/stores/runview';
+const runviewStore = useRunviewStore()
+let proStatus = computed(() => runviewStore.progressResult.status)
 </script>
 
 <style scoped lang="less">
@@ -60,13 +71,5 @@ import Result from '@/components/Result.vue';
   border: 5px solid #ddd;
   border-radius: 8px;
   height: 100px;
-}
-
-.run-result {
-  margin-top: 20px;
-  border: 1px solid #ddd;
-  flex: 1;
-  border: 5px solid #ddd;
-  border-radius: 8px;
 }
 </style>

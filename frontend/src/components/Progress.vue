@@ -6,6 +6,9 @@
                 <div v-if="proStatus === 'running'">
                     执行中
                 </div>
+                <div v-else-if="proStatus === 'finished'">
+                    执完成
+                </div>
                 <div v-else>
                     待执行
                 </div>
@@ -46,7 +49,6 @@ let proStatus = computed(() => runviewStore.progressResult.status)
 let duration = computed(() => runviewStore.progressResult.duration)
 let progress = computed(() => runviewStore.progressResult.progress)
 async function run() {
-    console.log(runviewStore.progressResult.status)
     if (status.value === 'start') {
         let res = await runviewStore.getProgress(uuid)
         runviewStore.updateProgressResult(res)
@@ -59,9 +61,8 @@ async function run() {
             if (n > 10) {
                 clearInterval(timer)
                 let res = await runviewStore.getResult(uuid)
-                console.log(123131312)
-                runviewStore.updateResult(res)
                 runviewStore.updateProgressResult({ status: 'finished', duration: 1 * n, progress: 100 })
+                runviewStore.updateResult(res)
             }
         }, 1000)
         // 伪逻辑--end
