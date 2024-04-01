@@ -44,7 +44,7 @@ export const useRunviewStore = defineStore('runview', {
     };
     let result:any
     if(initialProgressResult.status === 'finished'){
-      debugger
+      
       result =JSON.parse(localStorage.getItem('graphbench_result') as string) 
     }else{
       result = null

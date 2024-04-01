@@ -21,7 +21,7 @@ watch(result, (newResult) => {
 onMounted(() => {
     myChart_1 = echarts.init(barRWRef_1.value);
     myChart_2 = echarts.init(barRWRef_2.value);
-    if (result) {
+    if (result.value) {
         draw()
     }
 })

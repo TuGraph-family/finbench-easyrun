@@ -17,7 +17,9 @@ watch(result, (newResult) => {
 })
 onMounted(() => {
     myChart = echarts.init(pieRef.value);
-    if (result) {
+    console.log(result.value)
+    if (result.value) {
+
         draw()
     }
 })
