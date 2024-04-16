@@ -88,4 +88,3 @@ if __name__ == '__main__':
     server_init()
     app.run(debug=True)
     server_destroy()
-
