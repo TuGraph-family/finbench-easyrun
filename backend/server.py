@@ -54,7 +54,20 @@ def start_sut():
 
 @app.route('/start_test')
 def start_test():
-    return 'Welcome to the Flask Demo!'
+    global current_dataset
+    mode = request.args.get('mode')
+    if mode == 'validate':
+        if current_dataset != 'sf1':
+            return {'status':'failed', 'message': 'Validation test only supports sf1 dataset. Current dataset is {}'.format(current_dataset)}
+        utils.start_validate()
+        return 'Welcome to the Flask Demo!'
+    elif mode == 'benchmark':
+        if current_dataset != 'sf10':
+            return {'status':'failed', 'message': 'Benchmark test only supports sf10 dataset. Current dataset is {}'.format(current_dataset)}
+        utils.start_benchmark()
+        return 'Welcome to the Flask Demo!'
+    else:
+        return {'status':'failed', 'message': 'Invalid test mode'}
 
 @app.route('/progress')
 def progress():

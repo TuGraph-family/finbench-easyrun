@@ -30,3 +30,9 @@ def start_tugraph(dataset):
     cmd_tmpl = 'docker exec -it {} bash /root/scripts/{}_start.sh'
     output = subprocess.run(cmd_tmpl.format(TUGRAPH_DOCKER, dataset), capture_output=True, shell=True, text=True)
     return output.stdout.splitlines()
+
+def start_validate():
+    return ""
+
+def start_benchmark():
+    return ""
