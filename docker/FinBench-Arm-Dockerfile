@@ -1,0 +1,14 @@
+FROM tugraph/tugraph-compile-arm64v8-centos7:1.2.7
+
+RUN mkdir -p /data \
+     && mkdir -p /root/ldbc/ldbc_finbench_driver \
+     && mkdir -p /root/ldbc/ldbc_finbench_transaction_impls
+
+COPY maven-settings.xml /root/.m2/settings.xml
+COPY deps/ldbc_finbench_driver /root/ldbc/ldbc_finbench_driver
+COPY deps/ldbc_finbench_transaction_impls /root/ldbc/ldbc_finbench_transaction_impls
+
+# compile benchmark suite and modify configs
+RUN cd /root/ldbc/ldbc_finbench_driver && mvn clean install \
+     && cd /root/ldbc/ldbc_finbench_transaction_impls/tugraph \
+     && mvn clean package
