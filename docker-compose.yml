@@ -3,6 +3,7 @@ services:
 
   tugraph:
     image: tugraph/tugraph-bdci-tugraphdb:cent8
+    #image: tugraph/tugraph-bdci-tugraphdb:arm
     command: tail -f
     tty: true
     volumes:
@@ -16,6 +17,7 @@ services:
     depends_on:
       - tugraph
     image: tugraph/tugraph-bdci-finbench:cent8
+    #image: tugraph/tugraph-bdci-finbench:arm
     command: tail -f
     tty: true
     volumes:

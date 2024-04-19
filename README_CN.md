@@ -59,3 +59,9 @@ docker-compose up -d
 ### 其他
 
 注：选手可能提供新的tugraph-db的镜像。运行选手的镜像时，更新docker-compose.yml里面的内容
+
+### FAQ
+
+- Q: 报错`<jemalloc>: Unsupported system page size`问题
+- A: UOS兼容性问题，需要调整page size为4K
+
