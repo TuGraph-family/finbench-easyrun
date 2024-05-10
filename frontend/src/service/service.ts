@@ -16,9 +16,9 @@ export async function listDataset():Promise<Array<string>>{
 }
 
 // 加载数据集
-export async function loadDataSet():Promise<string>{
+export async function loadDataSet(data:any):Promise<string>{
     let endpoint = 'load_dataset'
-    let res = await httpClient.post(endpoint)
+    let res = await httpClient.post(endpoint,{body:JSON.stringify(data)})
     return res.data.status as string
 }
 

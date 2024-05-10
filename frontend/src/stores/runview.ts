@@ -66,9 +66,10 @@ export const useRunviewStore = defineStore('runview', {
       this.dataList = res
     },
     async runLoadDatase():Promise<string>{
-      let res = await loadDataSet()
+      let params = {'dataset':this.dataInfo.data}
+      let res = await loadDataSet(params)
       return res
-    },
+},
     async startSut():Promise<SystemStatus>{
       let res = await startSut()
       return res
