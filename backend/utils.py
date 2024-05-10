@@ -26,44 +26,12 @@ def load_dataset(dataset):
     return output.stdout.splitlines()
 
 def start_tugraph(dataset):
-    cmd = 'docker exec -it {} bash /root/scripts/{}_start.sh'.format(TUGRAPH_DOCKER, dataset)
-    output = subprocess.run(cmd, capture_output=True, shell=True, text=True)
+    cmd_tmpl = 'docker exec -it {} bash /root/scripts/{}_start.sh'
+    output = subprocess.run(cmd_tmpl.format(TUGRAPH_DOCKER, dataset), capture_output=True, shell=True, text=True)
     return output.stdout.splitlines()
 
 def start_validate():
-    if validated:
-        return False, 'Validation has been performed.'
-    # load procedures first
-    logs = load_procedure()
-    if logs.count('200') == 4:
-        logger.info('Procedures loaded successfully.')
-    elif logs.count('200') == 8:
-        logger.info('Procedures already loaded.')
-    else:
-        msg = 'Procedures loaded failed.'
-        logger.error(msg + ' Reason: \n{}'.format(logs))
-        return False, msg
-    
-    cmd = 'docker exec -it {} bash /root/scripts/sf1_validate.sh'.format(FINBENCH_DOCKER)
-    global current_task
-    current_task = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    # logger.info(output.stdout[-20:])
-    return True, 'submitted'
-
-def start_benchmark():
-    # load procedures first
-    logs = load_procedure()
-    if logs.count('200') == 4:
-        logger.info('Procedures loaded successfully')
-    elif logs.count('200') == 8:
-        logger.info('Procedures already loaded.')
-    else:
-        msg = 'Procedures loaded failed.'
-        logger.error(msg + ' Reason: \n{}'.format(logs))
-        return False, msg
     return ""
 
-def load_procedure():
-    cmd = 'docker exec -it {} bash /root/scripts/load_procedure.sh'.format(FINBENCH_DOCKER)
-    output = subprocess.run(cmd, capture_output=True, shell=True, text=True)
-    return output.stdout.splitlines()
+def start_benchmark():
+    return ""

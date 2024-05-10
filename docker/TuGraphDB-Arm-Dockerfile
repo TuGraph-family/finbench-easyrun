@@ -1,0 +1,9 @@
+FROM tugraph/tugraph-runtime-arm64v8-centos7:1.2.7
+
+ARG JFLAG=-j48
+
+COPY deps/tugraph-db /root/tugraph-db
+
+# install tugraph
+RUN cd /root/tugraph-db && mkdir build && cd build \
+     && cmake .. -DCMAKE_BUILD_TYPE=Coverage && make install ${JFLAG}
