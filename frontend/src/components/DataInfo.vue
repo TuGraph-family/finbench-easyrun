@@ -11,13 +11,18 @@
                 </el-select>
             </div>
             <div class="btn-load-data">
-                <el-button @click="loadData" :disabled="runviewStore.dataLoad === true">
-                    <span v-if="!runviewStore.dataLoad">请先加载数据</span>
-                    <span v-else>数据加载完成</span>
+                <el-button v-if="runviewStore.dataLoad === 'waiting'" @click="loadData" :disabled="runviewStore.dataLoad !=='waiting'">
+                    <span>请先加载数据</span>
+                </el-button>
+                <el-button v-if="runviewStore.dataLoad === 'loading'" loading disabled>
+                    <span>加载数据中</span>
+                </el-button>
+                <el-button v-if="runviewStore.dataLoad === 'finished'" disabled>
+                    <span>加载数据完成</span>
                 </el-button>
             </div>
             <div class="btn-start-system">
-                <el-button v-if="runviewStore.systemStatus.status === 'stop'" :disabled="!runviewStore.dataLoad"
+                <el-button v-if="runviewStore.systemStatus.status === 'stop'" :disabled="runviewStore.dataLoad !== 'finished'"
                     @click="startSut">启动系统</el-button>
                 <el-button v-else :disabled="runviewStore.systemStatus.status === 'start'"
                     @click="startSut">系统已启动</el-button>
@@ -36,15 +41,16 @@ runviewStore.getListDataset()
 // 监听 data 的变化，并更新 Pinia store 中的 dataInfo.data
 watch(data, (newValue) => {
     runviewStore.updateDataInfo({ data: newValue })
-    runviewStore.updateLoadData(false)
+    runviewStore.updateLoadData('waiting')
     runviewStore.updateSystemStatus({ uuid: '', status: 'stop' })
     runviewStore.updateProgressResult({ status: '', duration: 0, progress: 0 })
 })
 
 async function loadData() {
+    runviewStore.updateLoadData('loading')
     let res: string = await runviewStore.runLoadDatase()
     if (res === 'ok') {
-        runviewStore.updateLoadData(true)
+        runviewStore.updateLoadData('finished')
     }
 
 }

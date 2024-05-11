@@ -3,7 +3,7 @@ import type { SystemInfo, DataInfo, ModeInfo,DataList,ProgressResult,SystemStatu
 import {listDataset,loadDataSet,startSut,progress,result} from '../service/service'
 interface State {
   systemInfo: SystemInfo;
-  dataLoad:Boolean,
+  dataLoad:String,
   dataInfo: DataInfo,
   modeInfo: ModeInfo,
   dataList: DataList;
@@ -51,7 +51,7 @@ export const useRunviewStore = defineStore('runview', {
     }
     return {
       systemInfo: initialSystemInfo,
-      dataLoad:localStorage.graphbench_dataLoad === 'true'||false,
+      dataLoad:localStorage.graphbench_dataLoad || 'waiting', // wating | loading | finished
       dataInfo: initialDataInfo,
       modeInfo: initialModeInfo,
       progressResult:initialProgressResult,
@@ -91,9 +91,9 @@ export const useRunviewStore = defineStore('runview', {
       this.systemInfo = newSystemInfo;
       localStorage.setItem('graphbench_systemInfo', JSON.stringify(newSystemInfo));
     },
-    updateLoadData(newDataLoad:boolean){
+    updateLoadData(newDataLoad:string){
       this.dataLoad = newDataLoad
-      localStorage.setItem('graphbench_dataLoad',JSON.stringify(newDataLoad))
+      localStorage.setItem('graphbench_dataLoad',newDataLoad)
     },
     updateModeInfo(newModeInfo:ModeInfo){
       this.modeInfo = newModeInfo

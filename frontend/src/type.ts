@@ -30,7 +30,6 @@ interface ValidateInfo {
 
 export type ModeInfo = BenchmarkInfo | ValidateInfo;
 
-const a = 1
 // 数据列表
 export  type DataList = Array<string>
 
