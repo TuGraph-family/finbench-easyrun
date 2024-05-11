@@ -29,6 +29,12 @@ export async function startSut():Promise<SystemStatus>{
     let res = await httpClient.post(endpoint)
     return res.data
 }
+// 开始测试
+export async function startTest(data:any){
+    let endpoint = 'start_test'
+    let res:any = await httpClient.post(endpoint,{body:JSON.stringify(data)})
+    return res.data
+}
 // 开始测试并获取进度
 export async function progress(uuid:string){
     let endpoint = 'progress'

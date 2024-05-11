@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { SystemInfo, DataInfo, ModeInfo,DataList,ProgressResult,SystemStatus,FinResult } from '../type'
-import {listDataset,loadDataSet,startSut,progress,result} from '../service/service'
+import {listDataset,loadDataSet,startSut,progress,result,startTest} from '../service/service'
 interface State {
   systemInfo: SystemInfo;
   dataLoad:String,
@@ -69,7 +69,7 @@ export const useRunviewStore = defineStore('runview', {
       let params = {'dataset':this.dataInfo.data}
       let res = await loadDataSet(params)
       return res
-},
+    },
     async startSut():Promise<SystemStatus>{
       let res = await startSut()
       return res
@@ -81,6 +81,10 @@ export const useRunviewStore = defineStore('runview', {
     },
     async getResult(uuid:string):Promise<FinResult>{
       let res = await result(uuid)
+      return res
+    },
+    async startTest(data:any):Promise<any>{
+      let res = startTest(data)
       return res
     },
     updateDataInfo(newDataInfo: { data: string }) {

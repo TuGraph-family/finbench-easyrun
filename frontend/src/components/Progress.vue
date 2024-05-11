@@ -31,9 +31,7 @@
             </template>
         </div>
         <div class="btn-run">
-            <el-button type="danger"
-                :disabled="runviewStore.systemStatus.status !== 'start' || runviewStore.progressResult.status === 'running'"
-                circle @click="run">
+            <el-button v-if="runviewStore.dataLoad === 'finished' && runviewStore.systemStatus.status == 'start'" type="danger" circle @click="run">
                 启动
             </el-button>
         </div>
@@ -49,24 +47,14 @@ let proStatus = computed(() => runviewStore.progressResult.status)
 let duration = computed(() => runviewStore.progressResult.duration)
 let progress = computed(() => runviewStore.progressResult.progress)
 async function run() {
-    if (status.value === 'start') {
+    
+    runviewStore.startTest(runviewStore.modeInfo)
+    
+    setInterval(async ()=>{
         let res = await runviewStore.getProgress(uuid)
         runviewStore.updateProgressResult(res)
-        // 伪逻辑--start
-        let n = 2
-
-        let timer = setInterval(async () => {
-            runviewStore.updateProgressResult({ status: 'running', duration: 1 * n, progress: 10 * n })
-            n++
-            if (n > 10) {
-                clearInterval(timer)
-                let res = await runviewStore.getResult(uuid)
-                runviewStore.updateProgressResult({ status: 'finished', duration: 1 * n, progress: 100 })
-                runviewStore.updateResult(res)
-            }
-        }, 1000)
-        // 伪逻辑--end
-    }
+    },1000)
+    
 }
 </script>
 
