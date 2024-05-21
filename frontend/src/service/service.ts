@@ -14,34 +14,26 @@ export async function listDataset():Promise<Array<string>>{
     }
     return res.data.datasets
 }
-
-// 加载数据集
 export async function loadDataSet(data:any):Promise<string>{
     let endpoint = 'load_dataset'
     let res = await httpClient.post(endpoint,{body:JSON.stringify(data)})
     return res.data.status as string
 }
-
-
-// 启动系统
 export async function startSut():Promise<SystemStatus>{
     let endpoint = 'start_sut'
     let res = await httpClient.post(endpoint)
     return res.data
 }
-// 开始测试
 export async function startTest(data:any){
     let endpoint = 'start_test'
     let res:any = await httpClient.post(endpoint,{body:JSON.stringify(data)})
     return res.data
 }
-// 开始测试并获取进度
 export async function progress(uuid:string){
     let endpoint = 'progress'
     let res:any = await httpClient.post(endpoint,{body:JSON.stringify({'uuid':uuid})})
     return res.data
 }
-// 获取测试结果
 export async function result(uuid:string){
     let endpoint = 'result'
     let res:any = await httpClient.post(endpoint,{body:JSON.stringify({'uuid':uuid})})

@@ -1,94 +1,65 @@
 <template>
-    <div class="finbech-progress">
-        <div class="progress-result">
-            <div>
-                <div>测试结果</div>
-                <div v-if="proStatus === 'running'">
-                    执行中
-                </div>
-                <div v-else-if="proStatus === 'finished'">
-                    执完成
-                </div>
-                <div v-else>
-                    待执行
-                </div>
+    <div class="progress">
+        <div>
+            <div class="progress-title">
+                <span>
+                    执行进度：
+                </span>
+                <span>
+                    {{ phase }}
+                </span>
             </div>
-            <template v-if="runviewStore.modeInfo.mode === 'benchmark'">
-                <div>
-                    <div>
-                        测试时间
-                    </div>
-                    <div>
-                        {{ duration || 0 }}秒
-                    </div>
-                </div>
-                <div>
-                    <div>测试进度</div>
-                    <div>
-                        <el-progress :percentage="progress" />
-                    </div>
-                </div>
-            </template>
-        </div>
-        <div class="btn-run">
-            <el-button v-if="runviewStore.dataLoad === 'finished' && runviewStore.systemStatus.status == 'start'" type="danger" circle @click="run">
-                启动
-            </el-button>
+            <div>
+                <el-progress :percentage="progress" />
+            </div>
         </div>
     </div>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed,onUnmounted } from 'vue'
 import { useRunviewStore } from '@/stores/runview';
 const runviewStore = useRunviewStore()
 let uuid = runviewStore.systemStatus.uuid
-let status = computed(() => runviewStore.systemStatus.status)
-let proStatus = computed(() => runviewStore.progressResult.status)
-let duration = computed(() => runviewStore.progressResult.duration)
 let progress = computed(() => runviewStore.progressResult.progress)
-async function run() {
+let phase = computed(() => runviewStore.progressResult.phase)
+let timer = 0
+async function getProgress() {
     
-    runviewStore.startTest(runviewStore.modeInfo)
-    
-    setInterval(async ()=>{
-        let res = await runviewStore.getProgress(uuid)
-        runviewStore.updateProgressResult(res)
-    },1000)
-    
+    let startTime = Date.now()
+    timer = setInterval(async () => {
+        let res: any;
+        if (uuid !== 'test_uuid') {
+            res = await runviewStore.getProgress(uuid);
+        } else {
+            res = await runviewStore.getTestProgress(uuid,startTime);
+        }
+        runviewStore.updateProgressResult(res);
+        if (res.phase === 'completed') {
+            clearInterval(timer);
+        }
+    }, 1000);
 }
+onUnmounted(() => {
+    clearInterval(timer);
+});
+if(runviewStore.progressResult.phase !== 'completed'){
+    getProgress()
+}
+
 </script>
 
 <style scoped lang="less">
-.finbech-progress {
-    display: flex;
-    padding: 10px;
-
-    .progress-result {
-        flex-grow: 1;
+.progress {
+    padding: 0 1.875rem 0.875rem 1.875rem;
+    width: calc(100% - 3.75rem);
+    .progress-title{
         display: flex;
-
-        >div {
-            margin-right: 30px;
-
-            >div {
-                line-height: 40px;
-
-                .el-progress {
-                    margin-top: 13px;
-                    width: 200px;
-                }
-            }
-        }
-    }
-
-    .btn-run {
-        flex-grow: 0;
-    }
-
-    .el-button {
-        width: 80px;
-        height: 80px;
-        font-size: 30px;
+        align-items: center;
+        font-weight: 700;
+        line-height: 40px;
+        border-bottom: 1px dotted #424242;
+        font-size: 1.125rem;
+        margin-bottom: 0.625rem;
     }
 }
 </style>

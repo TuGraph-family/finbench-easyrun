@@ -37,16 +37,16 @@ export  type DataList = Array<string>
 // 进度结果
 
 export type ProgressResult =  {
-    "status":string,
+    "phase":string,
     "duration":number,
-    "progress":number
+    "progress":number,
+    "logs":{[key: string]: string}
 }
 
 // 系统状态
 
 export type SystemStatus = {
-    "uuid":string,
-    "status":string,
+    "uuid":string
 }
 
 // 测试结果

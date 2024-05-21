@@ -2,26 +2,31 @@
     <div class="modeinfo">
         <div class="modeinfo-title">模式配置</div>
         <div class="modeinfo-container">
-            <div>
-                <el-radio v-model="mode" label="validate">功能验证</el-radio>
-                <el-radio v-model="mode" label="benchmark">性能验证</el-radio>
+            <div class="select-mode">
+                <el-select  v-model="mode">
+                    <el-option value="validate" label="validate">功能验证</el-option>
+                    <el-option value="benchmark" label="benchmark">性能验证</el-option>
+                </el-select>
             </div>
             <template v-if="mode === 'benchmark'">
                 <div class="tcr">
-                    <el-input v-model="tcr" style="max-width: 600px" placeholder="压测参数">
+                    <el-input v-model="tcr" placeholder="压测参数">
                         <template #prepend>
                             <span class="input-prepend">压测参数：</span>
                         </template>
                     </el-input>
                 </div>
                 <div class="ops">
-                    <el-input v-model="ops" style="max-width: 600px" placeholder="目标查询">
+                    <el-input v-model="ops" placeholder="目标查询">
                         <template #prepend>
                             <span class="input-prepend">目标查询：</span>
                         </template>
                     </el-input>
                 </div>
             </template>
+            <div class="star-btn">
+                <el-button type="warning" :disabled="runviewStore.systemStatus.uuid && runviewStore.progressResult.phase !=='completed'?true:false" @click="start">启 动</el-button>
+            </div>
         </div>
     </div>
 </template>
@@ -44,6 +49,25 @@ watch([mode, tcr, ops], ([newMode, newTcr, newOps]) => {
         runviewStore.updateModeInfo({ mode: newMode, tcr: newTcr, ops: newOps })
     }
 })
+async function start(){
+    runviewStore.updateSystemStatus({uuid:''})
+    clear()
+    let res =await runviewStore.startTest(runviewStore.modeInfo)
+    if(res.uuid){
+        runviewStore.updateSystemStatus({uuid:res.uuid})
+    }else{
+        runviewStore.updateSystemStatus({uuid:'test_uuid'})
+    }
+}
+function clear(){
+    let initData  = {
+        "phase": "",
+        "duration": 0,
+        "progress": 0,
+        "logs": {}                       
+    }
+    runviewStore.updateProgressResult(initData,true);
+}
 </script>
 
 <style scoped lang="less">
@@ -60,6 +84,26 @@ watch([mode, tcr, ops], ([newMode, newTcr, newOps]) => {
         font-size: 1.125rem;
         .el-icon {
             cursor: pointer;
+        }
+    }
+    .modeinfo-container{
+        display: flex;
+        padding: 0.625rem 0;
+        >div{
+            flex-grow: 1;
+            margin-left: 0.625rem;
+        }
+        .select-mode{
+            flex-grow: 0;
+            width: 10rem;
+            margin-left: 0;
+        }
+        .star-btn{
+            width: 10rem;
+            flex-grow: 0;
+            .el-button{
+                width: 100%;
+            }
         }
     }
 }

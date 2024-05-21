@@ -19,8 +19,8 @@ watch(result, (newResult) => {
     draw()
 })
 onMounted(() => {
-    myChart_1 = echarts.init(barSRRef_1.value);
-    myChart_2 = echarts.init(barSRRef_2.value);
+    myChart_1 = echarts.init(barSRRef_1.value,'dark');
+    myChart_2 = echarts.init(barSRRef_2.value,'dark');
     if (result.value) {
         draw()
     }

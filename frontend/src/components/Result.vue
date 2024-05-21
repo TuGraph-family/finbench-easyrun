@@ -20,7 +20,6 @@
         <div class="performance-RW">
             <BarRW />
         </div>
-
     </div>
 </template>
 <script setup lang="ts">
@@ -44,7 +43,6 @@ watch(result, () => {
 
 <style scoped lang="less">
 .finbench-result {
-
     .performance-result,
     .performance-CR,
     .performance-SR,
@@ -53,6 +51,7 @@ watch(result, () => {
         border: 5px solid #ddd;
         border-radius: 8px;
         margin-top: 20px;
+        background-color: #100c2a;
     }
 }
 </style>
