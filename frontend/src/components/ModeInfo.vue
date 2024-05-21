@@ -31,9 +31,8 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { ref, watch } from 'vue'
 import type { Ref } from 'vue'
-import type { ModeInfo } from '../type'
 import { useRunviewStore } from '@/stores/runview';
 const runviewStore = useRunviewStore()
 const mode: Ref<'validate' | 'benchmark'> = ref('validate')

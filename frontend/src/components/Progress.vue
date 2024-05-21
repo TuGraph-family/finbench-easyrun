@@ -16,13 +16,13 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, computed,onUnmounted } from 'vue'
+import { computed, onUnmounted } from 'vue'
 import { useRunviewStore } from '@/stores/runview';
 const runviewStore = useRunviewStore()
 let uuid = runviewStore.systemStatus.uuid
 let progress = computed(() => runviewStore.progressResult.progress)
 let phase = computed(() => runviewStore.progressResult.phase)
-let timer = 0
+let timer:any = 0
 async function getProgress() {
     
     let startTime = Date.now()

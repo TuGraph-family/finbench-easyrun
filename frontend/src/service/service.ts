@@ -1,10 +1,10 @@
-import {httpClient} from '../http/http'
-import {ElNotification} from 'element-plus'
-import type {ProgressResult, SystemStatus} from '../type'
+import { httpClient } from '../http/http'
+import { ElNotification } from 'element-plus'
+import type { SystemStatus } from '../type'
 // 获取可用数据集
 export async function listDataset():Promise<Array<string>>{
-    let endpoint:string = 'list_dataset'
-    let res = await httpClient.post(endpoint)
+    const endpoint:string = 'list_dataset'
+    const res = await httpClient.post(endpoint)
     if(res.data.datasets.length === 0){
         ElNotification({
             title: '提示',
@@ -15,27 +15,27 @@ export async function listDataset():Promise<Array<string>>{
     return res.data.datasets
 }
 export async function loadDataSet(data:any):Promise<string>{
-    let endpoint = 'load_dataset'
-    let res = await httpClient.post(endpoint,{body:JSON.stringify(data)})
+    const endpoint = 'load_dataset'
+    const res = await httpClient.post(endpoint,{body:JSON.stringify(data)})
     return res.data.status as string
 }
 export async function startSut():Promise<SystemStatus>{
-    let endpoint = 'start_sut'
-    let res = await httpClient.post(endpoint)
+    const endpoint = 'start_sut'
+    const res = await httpClient.post(endpoint)
     return res.data
 }
 export async function startTest(data:any){
-    let endpoint = 'start_test'
-    let res:any = await httpClient.post(endpoint,{body:JSON.stringify(data)})
+    const endpoint = 'start_test'
+    const res:any = await httpClient.post(endpoint,{body:JSON.stringify(data)})
     return res.data
 }
 export async function progress(uuid:string){
-    let endpoint = 'progress'
-    let res:any = await httpClient.post(endpoint,{body:JSON.stringify({'uuid':uuid})})
+    const endpoint = 'progress'
+    const res:any = await httpClient.post(endpoint,{body:JSON.stringify({'uuid':uuid})})
     return res.data
 }
 export async function result(uuid:string){
-    let endpoint = 'result'
-    let res:any = await httpClient.post(endpoint,{body:JSON.stringify({'uuid':uuid})})
+    const endpoint = 'result'
+    const res:any = await httpClient.post(endpoint,{body:JSON.stringify({'uuid':uuid})})
     return res.data
 }

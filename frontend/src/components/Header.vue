@@ -9,7 +9,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
 import { HEADERCONFIG } from '../config/config'
 import {getAssetsFile} from '../utils/util'
 const headerName =  `${HEADERCONFIG.headerName} 图数据库基准测试系统`

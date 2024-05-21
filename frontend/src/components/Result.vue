@@ -23,7 +23,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { watch, computed } from 'vue'
 import { useRunviewStore } from '@/stores/runview';
 import Performance from './Performance.vue'
 import Pie from './Pie.vue'

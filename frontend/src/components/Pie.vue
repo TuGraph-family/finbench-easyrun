@@ -12,7 +12,7 @@ const pieRef = ref<HTMLElement | null>(null)
 let result = computed(() => runviewStore.result)
 let pieData: Array<any> = []
 let myChart: any = null
-watch(result, (newResult) => {
+watch(result, () => {
     draw()
 })
 onMounted(() => {

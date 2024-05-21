@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { SystemInfo, DataInfo, ModeInfo, DataList, ProgressResult, SystemStatus, FinResult } from '../type'
-import { listDataset, loadDataSet, startSut, progress, result, startTest } from '../service/service'
+import { listDataset, startSut, progress, result, startTest } from '../service/service'
 interface State {
   systemInfo: SystemInfo;
   dataInfo: DataInfo,
@@ -14,8 +14,8 @@ interface State {
 export const useRunviewStore = defineStore('runview', {
   state: (): State => {
     // 尝试从 localStorage 中读取 systemInfo 数据
-    let storedSystemInfo = localStorage.getItem('graphbench_systemInfo');
-    let initialSystemInfo: SystemInfo = storedSystemInfo ? JSON.parse(storedSystemInfo) : {
+    const storedSystemInfo = localStorage.getItem('graphbench_systemInfo');
+    const initialSystemInfo: SystemInfo = storedSystemInfo ? JSON.parse(storedSystemInfo) : {
       model: '',
       os: '',
       cpu: '',
@@ -23,22 +23,22 @@ export const useRunviewStore = defineStore('runview', {
       storage: '',
       network: ''
     };
-    let storedDataInfo = localStorage.getItem('graphbench_dataInfo');
-    let initialDataInfo: DataInfo = storedDataInfo ? JSON.parse(storedDataInfo) : {
+    const storedDataInfo = localStorage.getItem('graphbench_dataInfo');
+    const initialDataInfo: DataInfo = storedDataInfo ? JSON.parse(storedDataInfo) : {
       data: ''
     };
-    let storedModeInfo = localStorage.getItem('graphbench_modeInfo')
-    let initialModeInfo: ModeInfo = storedModeInfo ? JSON.parse(storedModeInfo) : {
+    const storedModeInfo = localStorage.getItem('graphbench_modeInfo')
+    const initialModeInfo: ModeInfo = storedModeInfo ? JSON.parse(storedModeInfo) : {
       mode: 'validate'
     };
-    let sotreProgressResult = localStorage.getItem('graphbench_progressResult')
-    let initialProgressResult: ProgressResult = sotreProgressResult ? JSON.parse(sotreProgressResult) : {
+    const sotreProgressResult = localStorage.getItem('graphbench_progressResult')
+    const initialProgressResult: ProgressResult = sotreProgressResult ? JSON.parse(sotreProgressResult) : {
       uuid: '',
       status: 'stop',
       logs: {}
     };
-    let sotreSystemStatus = localStorage.getItem('graphbench_systemStatus')
-    let initialSystemStatus: SystemStatus = sotreSystemStatus ? JSON.parse(sotreSystemStatus) : {
+    const sotreSystemStatus = localStorage.getItem('graphbench_systemStatus')
+    const initialSystemStatus: SystemStatus = sotreSystemStatus ? JSON.parse(sotreSystemStatus) : {
       uuid: ''
     };
     let result: any
@@ -59,29 +59,29 @@ export const useRunviewStore = defineStore('runview', {
   },
   actions: {
     async getListDataset() {
-      let res = await listDataset()
+      const res = await listDataset()
       this.dataList = res
     },
     async startSut(): Promise<SystemStatus> {
-      let res = await startSut()
+      const res = await startSut()
       return res
     },
     async getProgress(uuid: string): Promise<ProgressResult> {
-      let res = await progress(uuid)
+      const res = await progress(uuid)
       return res
 
     },
     async getResult(uuid: string): Promise<FinResult> {
-      let res = await result(uuid)
+      const res = await result(uuid)
       return res
     },
     async startTest(data: any): Promise<any> {
-      let res = startTest(data)
+      const res = startTest(data)
       return res
     },
     async getTestProgress(uuid: string, startTime: number): Promise<ProgressResult> {
       const DEFAULT_DURATION = 20;
-      let data: ProgressResult = {
+      const data: ProgressResult = {
         phase: 'in_progress',
         duration: 0,
         progress: 0,
@@ -112,6 +112,7 @@ export const useRunviewStore = defineStore('runview', {
       });
     },
     async getTestResult(uuid: string): Promise<FinResult> {
+      console.log('uuid:',uuid)
       const data = await import('@/mock/result-mock.json');
       return data
     },

@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import Header from '../components/Header.vue'
 import SystemInfo from '@/components/SystemInfo.vue'
 import ModeInfo from '@/components/ModeInfo.vue'

@@ -15,7 +15,7 @@ const barCRRef_2 = ref<HTMLElement | null>(null)
 let result = computed(() => runviewStore.result)
 let myChart_1: any = null
 let myChart_2: any = null
-watch(result, (newResult) => {
+watch(result, () => {
     draw()
 })
 onMounted(() => {
