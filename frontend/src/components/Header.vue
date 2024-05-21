@@ -25,11 +25,13 @@ document.title = headerName
   .logo {
     height: 3.75rem;
     background-color: #333333;
-    padding-left: 1.875rem;
     img{
       height: 100%;
       width: auto;
+      padding:0 1.875rem;
+      background-color: #fff;
     }
+    
   }
   .header-title{
     font-size: 1.4rem;
