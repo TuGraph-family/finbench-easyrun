@@ -26,6 +26,7 @@
 import { watch, computed } from 'vue'
 import { useRunviewStore } from '@/stores/runview';
 import Performance from './Performance.vue'
+// Abstract optimization after the Echarts component code.
 import Pie from './Pie.vue'
 import BarCR from './BarCR.vue'
 import BarSR from './BarSR.vue'
