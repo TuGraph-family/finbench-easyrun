@@ -3,9 +3,9 @@
         <div class="modeinfo-title">模式配置</div>
         <div class="modeinfo-container">
             <div class="select-mode">
-                <el-select  v-model="mode">
-                    <el-option value="validate" label="validate">功能验证</el-option>
-                    <el-option value="benchmark" label="benchmark">性能验证</el-option>
+                <el-select v-model="mode">
+                    <el-option value="validate" label="validate">正确性验证</el-option>
+                    <el-option value="benchmark" label="benchmark">性能测试</el-option>
                 </el-select>
             </div>
             <template v-if="mode === 'benchmark'">
@@ -25,7 +25,9 @@
                 </div>
             </template>
             <div class="star-btn">
-                <el-button type="warning" :disabled="runviewStore.systemStatus.uuid && runviewStore.progressResult.phase !=='completed'?true:false" @click="start">启 动</el-button>
+                <el-button type="warning"
+                    :disabled="runviewStore.systemStatus.uuid && runviewStore.progressResult.phase !== 'completed' ? true : false"
+                    @click="start">启 动</el-button>
             </div>
         </div>
     </div>
@@ -48,24 +50,24 @@ watch([mode, tcr, ops], ([newMode, newTcr, newOps]) => {
         runviewStore.updateModeInfo({ mode: newMode, tcr: newTcr, ops: newOps })
     }
 })
-async function start(){
-    runviewStore.updateSystemStatus({uuid:''})
+async function start() {
+    runviewStore.updateSystemStatus({ uuid: '' })
     clear()
-    let res =await runviewStore.startTest(runviewStore.modeInfo)
-    if(res.uuid){
-        runviewStore.updateSystemStatus({uuid:res.uuid})
-    }else{
-        runviewStore.updateSystemStatus({uuid:'test_uuid'})
+    let res = await runviewStore.startTest(runviewStore.modeInfo)
+    if (res.uuid) {
+        runviewStore.updateSystemStatus({ uuid: res.uuid })
+    } else {
+        runviewStore.updateSystemStatus({ uuid: 'test_uuid' })
     }
 }
-function clear(){
-    let initData  = {
+function clear() {
+    let initData = {
         "phase": "",
         "duration": 0,
         "progress": 0,
-        "logs": {}                       
+        "logs": {}
     }
-    runviewStore.updateProgressResult(initData,true);
+    runviewStore.updateProgressResult(initData, true);
 }
 </script>
 
@@ -73,6 +75,7 @@ function clear(){
 .modeinfo {
     padding: 0 1.875rem 0.875rem 1.875rem;
     width: calc(100% - 3.75rem);
+
     .modeinfo-title {
         display: flex;
         align-items: center;
@@ -81,26 +84,32 @@ function clear(){
         line-height: 40px;
         border-bottom: 1px dotted #424242;
         font-size: 1.125rem;
+
         .el-icon {
             cursor: pointer;
         }
     }
-    .modeinfo-container{
+
+    .modeinfo-container {
         display: flex;
         padding: 0.625rem 0;
-        >div{
+
+        >div {
             flex-grow: 1;
             margin-left: 0.625rem;
         }
-        .select-mode{
+
+        .select-mode {
             flex-grow: 0;
             width: 10rem;
             margin-left: 0;
         }
-        .star-btn{
+
+        .star-btn {
             width: 10rem;
             flex-grow: 0;
-            .el-button{
+
+            .el-button {
                 width: 100%;
             }
         }
