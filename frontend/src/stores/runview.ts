@@ -17,9 +17,9 @@ export const useRunviewStore = defineStore('runview', {
     const storedSystemInfo = localStorage.getItem('graphbench_systemInfo');
     const initialSystemInfo: SystemInfo = storedSystemInfo ? JSON.parse(storedSystemInfo) : {
       model: '',
-      os: '',
-      cpu: '',
-      memory: '',
+      os: 'UOS Server 20',
+      cpu: 'Phytium FTC662 64c',
+      memory: '256GiB',
       storage: '',
       network: ''
     };
@@ -112,7 +112,7 @@ export const useRunviewStore = defineStore('runview', {
       });
     },
     async getTestResult(uuid: string): Promise<FinResult> {
-      console.log('uuid:',uuid)
+      console.log('uuid:', uuid)
       const data = await import('@/mock/result-mock.json');
       return data
     },

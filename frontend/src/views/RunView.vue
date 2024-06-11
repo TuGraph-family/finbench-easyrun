@@ -34,8 +34,8 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const runviewStore = useRunviewStore()
 const isSystemInfoComplete = computed(() => {
-    const { model, os, cpu, memory, storage, network } = runviewStore.systemInfo
-    return model && os && cpu && memory && storage && network
+  const { model, os, cpu, memory, storage, network } = runviewStore.systemInfo
+  return model || os || cpu || memory || storage || network
 })
 const isSystemStart = computed(() => {
   const { uuid } = runviewStore.systemStatus
@@ -43,10 +43,10 @@ const isSystemStart = computed(() => {
 })
 const isCompleted = computed(() => {
   const { phase } = runviewStore.progressResult
-  return phase === 'completed'? true:false
+  return phase === 'completed' ? true : false
 })
 
-function open(){
+function open() {
   router.push({ name: 'resultview' });
 }
 
@@ -54,15 +54,14 @@ function open(){
 
 <style scoped lang="less">
 .run {
-  .result-btn{
+  .result-btn {
     padding: 0 1.875rem;
     display: flex;
     justify-content: flex-end;
-    .el-button{
+
+    .el-button {
       width: 200px;
     }
   }
 }
-
-
 </style>

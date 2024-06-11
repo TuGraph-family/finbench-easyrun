@@ -34,8 +34,8 @@
         <div v-else class="systeminfo-null">
             暂无系统配置
         </div>
-        <el-dialog destroy-on-close v-model="dialogVisible" title="系统配置" width="500" >
-           <el-form ref="ruleFormRef" :inline="true" :model="systemInfoData" label-width="auto" :rules="rules">
+        <el-dialog destroy-on-close v-model="dialogVisible" title="系统配置" width="500">
+            <el-form ref="ruleFormRef" :inline="true" :model="systemInfoData" label-width="auto">
                 <el-form-item label="机型" prop="model">
                     <el-input v-model="systemInfoData.model" style="max-width: 600px" placeholder="机型信息"></el-input>
                 </el-form-item>
@@ -60,7 +60,7 @@
                     <el-button @click="resetForm(ruleFormRef)">取消</el-button>
                     <el-button type="primary" @click="submitForm(ruleFormRef)"> 确认</el-button>
                 </div>
-            </template> 
+            </template>
         </el-dialog>
     </div>
 </template>
@@ -102,7 +102,7 @@ const rules = reactive<FormRules<SystemInfo>>({
 })
 const isSystemInfoComplete = computed(() => {
     const { model, os, cpu, memory, storage, network } = runviewStore.systemInfo
-    return model && os && cpu && memory && storage && network
+    return model || os || cpu || memory || storage || network
 })
 
 function openDialog() {
@@ -134,6 +134,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 .systeminfo {
     padding: 0 1.875rem 0.875rem 1.875rem;
     width: calc(100% - 3.75rem);
+
     .systeminfo-title {
         display: flex;
         align-items: center;
@@ -142,22 +143,25 @@ const resetForm = (formEl: FormInstance | undefined) => {
         line-height: 40px;
         border-bottom: 1px dotted #424242;
         font-size: 1.125rem;
+
         .el-icon {
             cursor: pointer;
         }
     }
+
     .systeminfo-container {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(2, auto);
         gap: 10px;
         margin-top: 10px;
-        >div{
+
+        >div {
             display: flex;
             align-items: center;
         }
     }
-    
+
     .systeminfo-null {
         height: 3.75rem;
         line-height: 3.75rem;
