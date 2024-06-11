@@ -16,5 +16,5 @@ fi
 
 sed -i 's/172.21.189.228/tugraph/g'  validate_database.properties
 
-# run asynchronously
-bash run.sh validate_database.properties
+# run and record it to a log file in /root/script
+bash run.sh validate_database.properties > /root/scripts/validate_sf1.log

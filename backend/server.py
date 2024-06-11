@@ -11,14 +11,17 @@ DOCKER_PREFIX = "finbench-easyrun"
 FINBENCH_DOCKER = "{}_finbench_1".format(DOCKER_PREFIX)
 TUGRAPH_DOCKER = "{}_tugraph_1".format(DOCKER_PREFIX)
 
+current_mode = None
 current_dataset = None
-validated = False
-benchmarked = False
+current_status = None
+current_phase = None
+current_msg = None
+async_process = None
 
 logger = app.logger
 logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter(
-    '[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s',
+    '[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 for handler in logger.handlers:

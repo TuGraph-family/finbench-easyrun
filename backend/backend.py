@@ -10,6 +10,7 @@ from flask_cors import CORS
 import utils
 import os
 import server
+import uuid
 
 app = Flask(__name__)
 CORS(app, resources=r"/*")
@@ -20,6 +21,8 @@ RESP_FAILED_TMPL = {"status": "failed", "message": ""}
 def wrap_data(resp: dict):
     return {'data': resp}
 
+########################################################
+# legacy interface
 @app.route('/list_dataset', methods=['POST'])
 def list_dataset():
     datasets = []
@@ -30,85 +33,173 @@ def list_dataset():
         datasets.append('sf10')
     return wrap_data({'datasets': datasets})
 
-
+# legacy interface
 @app.route('/load_dataset', methods=['POST'])
 def load_dataset():
     dataset = request.json.get('dataset')
-    server.logger.info('Loading dataset: {}'.format(dataset))
+    server.logger.info('Dataset loading: {}'.format(dataset))
     if dataset is None or dataset not in ['sf1', 'sf10']:
-        return RESP_FAILED_TMPL.update({'message': 'Invalid dataset name'})
-    global current_dataset
-    current_dataset = dataset
+        return wrap_data(RESP_FAILED_TMPL.update({'message': 'Invalid dataset name'}))
+    server.current_dataset = dataset
     logs = utils.load_dataset(dataset)
+    server.logger.info('Dataset loaded: {}'.format(dataset))
     import_res = logs[-1].strip()
     if 'Import finished' in import_res:
-        return RESPONSE_OK
+        return wrap_data(RESPONSE_OK)
     else:
-        return RESP_FAILED_TMPL.update({'message': import_res})
+        return wrap_data(RESP_FAILED_TMPL.update({'message': import_res}))
         
-
+# legacy interface
 @app.route('/start_sut', methods=['POST'])
 def start_sut():
-    global current_dataset
-    if current_dataset is None:
-        return {'status':'failed', 'message': 'No dataset loaded'}
-    logs = utils.start_tugraph(current_dataset)
+    if server.current_dataset is None:
+        return wrap_data(RESP_FAILED_TMPL.update({'message': 'No dataset loaded'}))
+    logs = utils.start_tugraph(server.current_dataset)
     start_res = logs[-1].strip()
     if 'The service process is started at' in start_res:
-        return RESPONSE_OK
+        return wrap_data(RESPONSE_OK)
     else:
-        return RESP_FAILED_TMPL.update({'message': start_res})
+        return wrap_data(RESP_FAILED_TMPL.update({'message': start_res}))
+########################################################
 
 
 @app.route('/start_test', methods=['POST'])
 def start_test():
-    global current_dataset
-    if current_dataset is None:
-        return RESP_FAILED_TMPL.update({'message': 'No dataset loaded'})
-    mode = request.args.get('mode')
+    mode = request.json.get('mode')
+    task_id = str(uuid.uuid4())
     if mode == 'validate':
-        if current_dataset != 'sf1':
-            msg = 'Validation only supports sf1. Current dataset is {}'.format(current_dataset)
-            return RESP_FAILED_TMPL.update({'message': msg})
-        succeed, msg = utils.start_validate()
-        if succeed:
-            return RESPONSE_OK.update({'message': msg})
-        else:
-            server.logger.error(msg)
-            return RESP_FAILED_TMPL.update({'message': msg})
+        server.logger.info('start validate')
+        run_validate()
+        return wrap_data({"status": "ok", "message": "", "uuid": task_id})
     elif mode == 'benchmark':
-        # if current_dataset != 'sf10':
-        #     msg = 'Benchmark only supports sf10. Current dataset is {}'.format(current_dataset)
-        #     return RESP_FAILED_TMPL.update({'message':  msg})
-        # logs = utils.start_benchmark()
-        return RESPONSE_OK
+        server.logger.info('Start benchmark')
+        run_benchmark()
+        return wrap_data({"status": "ok", "message": "", "uuid": task_id})
     else:
-        return RESP_FAILED_TMPL.update({'message': 'Invalid mode'})
+        return wrap_data(RESP_FAILED_TMPL.update({'message': 'illegal test mode'}))
+    
+def run_validate():
+    server.mode = "validate"
+    server.current_dataset = "sf1"
+    
+    # load dataset sf1
+    server.current_phase = "Loading dataset sf1"
+    server.logger.info('Loading dataset sf1')
+    logs = utils.load_dataset(server.current_dataset)
+    import_res = logs[-1].strip()
+    if 'Import finished' not in import_res:
+        server.logger.error('Dataset loading failed: {}'.format(import_res))
+        server.current_status = 'failed'
+        server.current_msg = import_res
+    server.logger.info('sf1 Dataset loaded')
+    
+    # start tugraph
+    server.current_phase = "starting tugraph server"
+    server.logger.info('starting tugraph server')
+    logs = utils.start_tugraph(server.current_dataset)
+    start_res = logs[-1].strip()
+    if 'The service process is started at' not in start_res:
+        server.logger.error('TuGraph server start failed: {}'.format(start_res))
+        server.current_status = 'failed'
+        server.current_msg = start_res
+    server.logger.info('tugraph server started')
+    
+    # install procedures
+    server.logger.info('installing procedures')
+    logs = utils.install_procedures()
+    server.logger.info('procedures installed')
+    server.logger.info(logs)
+    
+    # run validate
+    server.current_phase = "validating..."
+    server.async_process = utils.start_validate()
+    server.logger.info('validation started')
+
+def run_benchmark():
+    server.mode = "benchmark"
+    server.current_dataset = "sf10"
+    
+    # load dataset sf1
+    server.current_phase = "Loading dataset sf10"
+    server.logger.info('Loading dataset sf10')
+    logs = utils.load_dataset(server.current_dataset)
+    import_res = logs[-1].strip()
+    if 'Import finished' not in import_res:
+        server.logger.error('Dataset loading failed: {}'.format(import_res))
+        server.current_status = 'failed'
+        server.current_msg = import_res
+    server.logger.info('sf10 Dataset loaded')
+    
+    # start tugraph
+    server.current_phase = "starting tugraph server"
+    server.logger.info('starting tugraph server')
+    logs = utils.start_tugraph(server.current_dataset)
+    start_res = logs[-1].strip()
+    if 'The service process is started at' not in start_res:
+        server.logger.error('TuGraph server start failed: {}'.format(start_res))
+        server.current_status = 'failed'
+        server.current_msg = start_res
+    server.logger.info('tugraph server started')
+    
+    # install procedures
+    server.logger.info('installing procedures')
+    logs = utils.install_procedures()
+    server.logger.info('procedures installed')
+    server.logger.info(logs)
+    
+    # run validate
+    server.current_phase = "benchmarking"
+    server.async_process = utils.start_benchmark()
+    server.logger.info('benchmarking started')
+    return wrap_data(RESPONSE_OK)
 
 
 @app.route('/progress', methods=['POST'])
 def progress():
-    global current_task
-    if current_task is None:
-        return RESP_FAILED_TMPL.update({'message': 'No task running'})
-    line = current_task.readline()
-    server.logger.info(line)
-    return RESPONSE_OK
+    if server.mode == "validate":
+        return progress_validate()
+    elif server.mode == "benchmark":
+        return progress_benchmark()
+    else:
+        return wrap_data(RESP_FAILED_TMPL.update({'message': 'Incorrect mode'}))
 
+def progress_validate():
+    log_file = "../scripts/validate_sf1.log"
+    if not os.path.exists(log_file):
+        return wrap_data(RESP_FAILED_TMPL.update({'message': 'Log file not found yet'}))
+    with open(log_file, 'r') as f:
+        logs = f.readlines()
+        server.logger.info("{} lines in log file read".format(len(logs)))
+        last_loglines = logs[-300:]
+        last_logline = logs[-1]
+    return wrap_data(RESPONSE_OK)
+
+def progress_benchmark():
+    log_file = "../scripts/benchmark_sf10.log"
+    if not os.path.exists(log_file):
+        return wrap_data(RESP_FAILED_TMPL.update({'message': 'Log file not found yet'}))
+    with open(log_file, 'r') as f:
+        logs = f.readlines()
+        server.logger.info("{} lines in log file read".format(len(logs)))
+        last_loglines = logs[-300:]
+        last_logline = logs[-1]
+    return wrap_data(RESPONSE_OK)
 
 @app.route('/result', methods=['POST'])
 def result():
-    return RESPONSE_OK
+    return wrap_data(RESPONSE_OK)
 
 
 @app.route('/reset_all', methods=['POST'])
 def reset_all():
     server.current_dataset = None
-    server.validated = False
-    server.benchmarked = False
+    server.current_mode = None
+    server.current_msg = None
+    server.current_phase = None
+    server.current_status = None
     utils.stop_finbench_dockers()
     utils.start_finbench_dockers()
-    return RESPONSE_OK
+    return wrap_data(RESPONSE_OK)
 
 
 def server_init():

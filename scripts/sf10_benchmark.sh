@@ -12,4 +12,5 @@ fi
 
 sed -i 's/172.21.189.228/tugraph/g'  benchmark.properties
 
-nohup bash run.sh benchmark.properties &
+# run and record it to a log file in /root/script
+bash run.sh validate_database.properties > /root/scripts/benchmark_sf10.log

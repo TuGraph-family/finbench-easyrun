@@ -26,8 +26,17 @@ def start_tugraph(dataset):
     output = subprocess.run(cmd_tmpl.format(server.TUGRAPH_DOCKER, dataset), capture_output=True, shell=True, text=True)
     return output.stdout.splitlines()
 
+def install_procedures():
+    cmd_tmpl = 'docker exec -it {} bash /root/scripts/load_procedure.sh'
+    output = subprocess.run(cmd_tmpl.format(server.FINBENCH_DOCKER), capture_output=True, shell=True, text=True)
+    return output.stdout.splitlines()
+
 def start_validate():
-    return ""
+    cmd_tmpl = 'docker exec -it {} bash /root/scripts/sf1_validate.sh'
+    p = subprocess.Popen(cmd_tmpl.format(server.FINBENCH_DOCKER), shell=True)
+    return p
 
 def start_benchmark():
-    return ""
+    cmd_tmpl = 'docker exec -it {} bash /root/scripts/sf10_benchmark.sh'
+    p = subprocess.Popen(cmd_tmpl.format(server.FINBENCH_DOCKER), shell=True)
+    return p
