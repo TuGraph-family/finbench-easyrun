@@ -1,13 +1,11 @@
 <template>
-    <div class="finbech-systeminfo">
-        <div class="finbech-systeminfo-title">系统配置
-
+    <div class="systeminfo">
+        <div class="systeminfo-title">系统配置
             <el-icon @click="openDialog" style="color: #fff;">
                 <Setting />
             </el-icon>
         </div>
-        <div class="finbech-systeminfo-container">
-            <div class="finbech-systeminfo-img"></div>
+        <div v-if="isSystemInfoComplete" class="systeminfo-container">
             <div>
                 <div>机型：</div>
                 <div class="parameters">{{ runviewStore.systemInfo.model }}</div>
@@ -33,58 +31,48 @@
                 <div class="parameters">{{ runviewStore.systemInfo.network }}</div>
             </div>
         </div>
+        <div v-else class="systeminfo-null">
+            暂无系统配置
+        </div>
         <el-dialog destroy-on-close v-model="dialogVisible" title="系统配置" width="500">
-            <div>
-                <img src="../assets/system.png" alt="">
-                <el-input v-model="systemInfo.model" style="max-width: 600px" placeholder="机型信息">
-                    <template #prepend>
-                        <span class="input-prepend">机型：</span>
-                    </template>
-                </el-input>
-                <el-input v-model="systemInfo.os" style="max-width: 600px" placeholder="系统信息">
-                    <template #prepend>
-                        <span class="input-prepend">系统：</span>
-                    </template>
-                </el-input>
-                <el-input v-model="systemInfo.cpu" style="max-width: 600px" placeholder="处理器信息">
-                    <template #prepend>
-                        <span class="input-prepend">处理器：</span>
-                    </template>
-                </el-input>
-                <el-input v-model="systemInfo.memory" style="max-width: 600px" placeholder="内存信息">
-                    <template #prepend>
-                        <span class="input-prepend">内存：</span>
-                    </template>
-                </el-input>
-                <el-input v-model="systemInfo.storage" style="max-width: 600px" placeholder="硬盘信息">
-                    <template #prepend>
-                        <span class="input-prepend">硬盘：</span>
-                    </template>
-                </el-input>
-                <el-input v-model="systemInfo.network" style="max-width: 600px" placeholder="网络信息">
-                    <template #prepend>
-                        <span class="input-prepend">网络：</span>
-                    </template>
-                </el-input>
-            </div>
+            <el-form ref="ruleFormRef" :inline="true" :model="systemInfoData" label-width="auto">
+                <el-form-item label="机型" prop="model">
+                    <el-input v-model="systemInfoData.model" style="max-width: 600px" placeholder="机型信息"></el-input>
+                </el-form-item>
+                <el-form-item label="系统" prop="os">
+                    <el-input v-model="systemInfoData.os" style="max-width: 600px" placeholder="系统信息"></el-input>
+                </el-form-item>
+                <el-form-item label="处理器" prop="cpu">
+                    <el-input v-model="systemInfoData.cpu" style="max-width: 600px" placeholder="处理器信息"></el-input>
+                </el-form-item>
+                <el-form-item label="内存" prop="memory">
+                    <el-input v-model="systemInfoData.memory" style="max-width: 600px" placeholder="内存信息"></el-input>
+                </el-form-item>
+                <el-form-item label="硬盘" prop="storage">
+                    <el-input v-model="systemInfoData.storage" style="max-width: 600px" placeholder="硬盘信息"></el-input>
+                </el-form-item>
+                <el-form-item label="网络" prop="network">
+                    <el-input v-model="systemInfoData.network" style="max-width: 600px" placeholder="网络信息"></el-input>
+                </el-form-item>
+            </el-form>
             <template #footer>
                 <div class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取消</el-button>
-                    <el-button type="primary" @click="updateInfo">
-                        确认
-                    </el-button>
+                    <el-button @click="resetForm(ruleFormRef)">取消</el-button>
+                    <el-button type="primary" @click="submitForm(ruleFormRef)"> 确认</el-button>
                 </div>
             </template>
         </el-dialog>
     </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useRunviewStore } from '../stores/runview'
 import type { SystemInfo } from '../type'
+import type { FormRules, FormInstance } from 'element-plus'
 const runviewStore = useRunviewStore()
 const dialogVisible = ref(false)
-const systemInfo = reactive<SystemInfo>({
+const ruleFormRef = ref<FormInstance>()
+const systemInfoData = reactive<SystemInfo>({
     model: '',
     os: '',
     cpu: '',
@@ -92,78 +80,98 @@ const systemInfo = reactive<SystemInfo>({
     storage: '',
     network: ''
 })
-function updateInfo() {
-    runviewStore.updateSystemInfo(systemInfo);
-    dialogVisible.value = false
-}
+const rules = reactive<FormRules<SystemInfo>>({
+    model: [
+        { required: true, message: '请填写机型信息', trigger: 'blur' },
+    ],
+    os: [
+        { required: true, message: '请填写系统信息', trigger: 'blur' },
+    ],
+    cpu: [
+        { required: true, message: '请填写处理器信息', trigger: 'blur' },
+    ],
+    memory: [
+        { required: true, message: '请填写内存信息', trigger: 'blur' },
+    ],
+    storage: [
+        { required: true, message: '请填写硬盘信息', trigger: 'blur' },
+    ],
+    network: [
+        { required: true, message: '请填写网络信息', trigger: 'blur' },
+    ],
+})
+const isSystemInfoComplete = computed(() => {
+    const { model, os, cpu, memory, storage, network } = runviewStore.systemInfo
+    return model || os || cpu || memory || storage || network
+})
+
 function openDialog() {
-    Object.assign(systemInfo, runviewStore.systemInfo)
+    Object.assign(systemInfoData, runviewStore.systemInfo)
     dialogVisible.value = true
 
 }
+const submitForm = (formEl: FormInstance | undefined) => {
+    if (!formEl) return
+    formEl.validate((valid) => {
+        if (valid) {
+            runviewStore.updateSystemInfo(systemInfoData);
+            dialogVisible.value = false
+        } else {
+            console.log('error submit!')
+        }
+    })
+}
+
+const resetForm = (formEl: FormInstance | undefined) => {
+    if (!formEl) return
+    formEl.resetFields()
+}
+
+
 </script>
 
 <style scoped lang="less">
-.finbech-systeminfo {
-    width: 100%;
+.systeminfo {
+    padding: 0 1.875rem 0.875rem 1.875rem;
+    width: calc(100% - 3.75rem);
 
-    &-title {
-        font-weight: bolder;
-        font-size: 18px;
-        padding: 3px 10px;
-        border-bottom: 1px solid #ddd;
-        position: relative;
+    .systeminfo-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 700;
+        line-height: 40px;
+        border-bottom: 1px dotted #424242;
+        font-size: 1.125rem;
 
         .el-icon {
-            position: absolute;
-            right: 10px;
-            bottom: 5px;
             cursor: pointer;
         }
     }
 
-    &-container {
+    .systeminfo-container {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(4, 1fr);
-        padding: 10px;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, auto);
+        gap: 10px;
+        margin-top: 10px;
 
         >div {
-            margin: 0 10px 10px 0;
+            display: flex;
+            align-items: center;
         }
     }
 
-    &-img {
-        width: 100px;
-        height: 100px;
-        background-image: url('../assets/system.png');
-        background-size: contain;
-        background-repeat: no-repeat;
-        grid-row-start: 1;
-        grid-row-end: 3;
+    .systeminfo-null {
+        height: 3.75rem;
+        line-height: 3.75rem;
+        text-align: center;
     }
 
-    .el-input {
-        margin-bottom: 10px;
-
-        &:last-child {
-            margin-bottom: 0;
-        }
+    .el-form-item {
+        width: 100%;
     }
 
-    .input-prepend {
-        width: 60px;
-        /* 根据需要调整这个宽度 */
-        display: inline-block;
-        /* 保证可以应用宽度 */
-        text-align: right;
-        /* 右对齐文本 */
-    }
 
-    img {
-        width: 150px;
-        display: block;
-        margin: 0 auto 10px auto;
-    }
 }
 </style>

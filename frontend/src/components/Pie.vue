@@ -12,11 +12,11 @@ const pieRef = ref<HTMLElement | null>(null)
 let result = computed(() => runviewStore.result)
 let pieData: Array<any> = []
 let myChart: any = null
-watch(result, (newResult) => {
+watch(result, () => {
     draw()
 })
 onMounted(() => {
-    myChart = echarts.init(pieRef.value);
+    myChart = echarts.init(pieRef.value,'dark');
     console.log(result.value)
     if (result.value) {
 
@@ -51,7 +51,6 @@ function draw() {
     height: 400px;
     text-align: center;
     padding: 10px;
-
     >#PieCanvas {
         width: 100%;
         height: 100%;

@@ -15,12 +15,12 @@ const barCRRef_2 = ref<HTMLElement | null>(null)
 let result = computed(() => runviewStore.result)
 let myChart_1: any = null
 let myChart_2: any = null
-watch(result, (newResult) => {
+watch(result, () => {
     draw()
 })
 onMounted(() => {
-    myChart_1 = echarts.init(barCRRef_1.value);
-    myChart_2 = echarts.init(barCRRef_2.value);
+    myChart_1 = echarts.init(barCRRef_1.value,'dark');
+    myChart_2 = echarts.init(barCRRef_2.value,'dark');
     if (result.value) {
         draw()
     }

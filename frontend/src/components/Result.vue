@@ -20,13 +20,13 @@
         <div class="performance-RW">
             <BarRW />
         </div>
-
     </div>
 </template>
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { watch, computed } from 'vue'
 import { useRunviewStore } from '@/stores/runview';
 import Performance from './Performance.vue'
+// Abstract optimization after the Echarts component code.
 import Pie from './Pie.vue'
 import BarCR from './BarCR.vue'
 import BarSR from './BarSR.vue'
@@ -44,7 +44,6 @@ watch(result, () => {
 
 <style scoped lang="less">
 .finbench-result {
-
     .performance-result,
     .performance-CR,
     .performance-SR,
@@ -53,6 +52,7 @@ watch(result, () => {
         border: 5px solid #ddd;
         border-radius: 8px;
         margin-top: 20px;
+        background-color: #100c2a;
     }
 }
 </style>
