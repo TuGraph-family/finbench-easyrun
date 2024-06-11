@@ -147,7 +147,7 @@ def run_benchmark():
     server.logger.info('procedures installed')
     server.logger.info(logs)
     
-    # run validate
+    # run benchmarking
     server.current_phase = "benchmarking"
     server.async_process = utils.start_benchmark()
     server.logger.info('benchmarking started')
