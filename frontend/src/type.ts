@@ -40,7 +40,9 @@ export type ProgressResult = {
     "status": string,
     "duration": number,
     "progress": number,
-    "logs": { [key: string]: string }
+    "num_lines": number,
+    "phase": string,
+    "logs": Array<string>
 }
 
 // 系统状态

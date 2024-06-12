@@ -56,8 +56,6 @@ async function start() {
     let res = await runviewStore.startTest(runviewStore.modeInfo)
     if (res.uuid) {
         runviewStore.updateSystemStatus({ uuid: res.uuid })
-    } else {
-        runviewStore.updateSystemStatus({ uuid: 'test_uuid' })
     }
 }
 function clear() {
@@ -65,7 +63,9 @@ function clear() {
         "status": "",
         "duration": 0,
         "progress": 0,
-        "logs": {}
+        "logs": [],
+        "num_lines": 0,
+        "phase": ''
     }
     runviewStore.updateProgressResult(initData, true);
 }

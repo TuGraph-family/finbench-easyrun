@@ -57,6 +57,7 @@
             </el-form>
             <template #footer>
                 <div class="dialog-footer">
+                    <el-button @click="resetSystem()" type="danger">重置系统</el-button>
                     <el-button @click="resetForm(ruleFormRef)">取消</el-button>
                     <el-button type="primary" @click="submitForm(ruleFormRef)"> 确认</el-button>
                 </div>
@@ -126,7 +127,9 @@ const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.resetFields()
 }
-
+const resetSystem = () => {
+    runviewStore.resetAll();
+}
 
 </script>
 
@@ -171,7 +174,5 @@ const resetForm = (formEl: FormInstance | undefined) => {
     .el-form-item {
         width: 100%;
     }
-
-
 }
 </style>

@@ -6,7 +6,7 @@
                     执行进度：
                 </span>
                 <span>
-                    {{ status }}
+                    {{ phase }}
                 </span>
             </div>
             <div>
@@ -21,18 +21,13 @@ import { useRunviewStore } from '@/stores/runview';
 const runviewStore = useRunviewStore()
 let uuid = runviewStore.systemStatus.uuid
 let progress = computed(() => runviewStore.progressResult.progress)
-let status = computed(() => runviewStore.progressResult.status)
+let phase = computed(() => runviewStore.progressResult.phase)
 let timer: any = 0
 async function getProgress() {
-
     let startTime = Date.now()
     timer = setInterval(async () => {
         let res: any;
-        if (uuid !== 'test_uuid') {
-            res = await runviewStore.getProgress(uuid);
-        } else {
-            res = await runviewStore.getTestProgress(uuid, startTime);
-        }
+        res = await runviewStore.getProgress(uuid);
         runviewStore.updateProgressResult(res);
         if (res.status === 'completed') {
             clearInterval(timer);

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { SystemInfo, DataInfo, ModeInfo, DataList, ProgressResult, SystemStatus, FinResult } from '../type'
-import { listDataset, startSut, progress, result, startTest } from '../service/service'
+import { listDataset, startSut, progress, result, startTest, resetAll } from '../service/service'
 interface State {
   systemInfo: SystemInfo;
   dataInfo: DataInfo,
@@ -33,9 +33,12 @@ export const useRunviewStore = defineStore('runview', {
     };
     const sotreProgressResult = localStorage.getItem('graphbench_progressResult')
     const initialProgressResult: ProgressResult = sotreProgressResult ? JSON.parse(sotreProgressResult) : {
-      uuid: '',
-      status: 'stop',
-      logs: {}
+      status: '',
+      duration: 0,
+      progress: 0,
+      num_lines: 0,
+      phase: '',
+      logs: []
     };
     const sotreSystemStatus = localStorage.getItem('graphbench_systemStatus')
     const initialSystemStatus: SystemStatus = sotreSystemStatus ? JSON.parse(sotreSystemStatus) : {
@@ -79,42 +82,15 @@ export const useRunviewStore = defineStore('runview', {
       const res = startTest(data)
       return res
     },
-    async getTestProgress(uuid: string, startTime: number): Promise<ProgressResult> {
-      const DEFAULT_DURATION = 20;
-      const data: ProgressResult = {
-        status: 'in_progress',
-        duration: 0,
-        progress: 0,
-        logs: {}
-      };
-      function generateRandomLog(progress: number): string {
-        const logs = [
-          `INFO: System check completed. Progress: ${progress.toFixed(2)}%`,
-          `WARNING: Disk usage is high. Progress: ${progress.toFixed(2)}%`,
-          `ERROR: Network latency detected. Progress: ${progress.toFixed(2)}%`,
-          `DEBUG: Memory allocation successful. Progress: ${progress.toFixed(2)}%`,
-          `TRACE: Entering phase ${progress.toFixed(2)}. Progress: ${progress.toFixed(2)}%`
-        ];
-        return logs[Math.floor(Math.random() * logs.length)];
-      }
-      return new Promise<ProgressResult>((resolve) => {
-        const elapsedTime = (Date.now() - startTime) / 1000;
-        const progress = Math.min((elapsedTime / DEFAULT_DURATION) * 100, 100);
-        data.duration = parseFloat(elapsedTime.toFixed(2));
-        data.progress = parseFloat(progress.toFixed(2));
-        const randomLog = generateRandomLog(progress);
-        const logTime = new Date().toISOString();
-        data.logs[logTime] = randomLog;
-        if (progress >= 100) {
-          data.status = 'completed';
-        }
-        resolve(data)
-      });
-    },
-    async getTestResult(uuid: string): Promise<FinResult> {
-      console.log('uuid:', uuid)
-      const data = await import('@/mock/result-mock.json');
-      return data
+    async resetAll(): Promise<any> {
+      const res = resetAll()
+      localStorage.setItem('graphbench_dataInfo', '');
+      localStorage.setItem('graphbench_systemInfo', '');
+      localStorage.setItem('graphbench_modeInfo', '');
+      localStorage.setItem('graphbench_systemStatus', '');
+      localStorage.setItem('graphbench_progressResult', '');
+      localStorage.setItem('graphbench_result', '');
+      return res
     },
     updateDataInfo(newDataInfo: { data: string }) {
       this.dataInfo = newDataInfo;
@@ -133,9 +109,10 @@ export const useRunviewStore = defineStore('runview', {
       localStorage.setItem('graphbench_systemStatus', JSON.stringify(newSystemStatus))
     },
     updateProgressResult(newProgressResult: ProgressResult, isInit?: boolean) {
-      let logs = { ...this.progressResult.logs, ...newProgressResult.logs }
+      let n = newProgressResult.num_lines - this.progressResult.num_lines
+      let logs = [...this.progressResult.logs, ...newProgressResult.logs.slice(-n)]
       if (isInit) {
-        logs = {}
+        logs = []
       }
       newProgressResult.logs = logs
       this.progressResult = newProgressResult
