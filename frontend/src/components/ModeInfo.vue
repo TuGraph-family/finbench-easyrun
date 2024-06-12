@@ -4,8 +4,8 @@
         <div class="modeinfo-container">
             <div class="select-mode">
                 <el-select v-model="mode">
-                    <el-option value="validate" label="validate">正确性验证</el-option>
-                    <el-option value="benchmark" label="benchmark">性能测试</el-option>
+                    <el-option value="validate" label="正确性验证">正确性验证</el-option>
+                    <el-option value="benchmark" label="性能测试">性能测试</el-option>
                 </el-select>
             </div>
             <template v-if="mode === 'benchmark'">

@@ -15,7 +15,7 @@
     <div v-if="isSystemStart">
       <Logs />
     </div>
-    <div v-if="isCompleted" class="result-btn">
+    <div v-if="isCompleted && mode == 'benchmark'" class="result-btn">
       <el-button size="large" type="success" @click="open">查看结果</el-button>
     </div>
   </div>
@@ -44,6 +44,11 @@ const isSystemStart = computed(() => {
 const isCompleted = computed(() => {
   const { phase } = runviewStore.progressResult
   return phase === 'completed' ? true : false
+})
+
+const mode = computed(() => {
+  const { mode } = runviewStore.modeInfo
+  return mode
 })
 
 function open() {
