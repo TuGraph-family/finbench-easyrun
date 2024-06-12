@@ -9,6 +9,7 @@ interface State {
   progressResult: ProgressResult,
   systemStatus: SystemStatus,
   result: FinResult
+  isReseting: boolean
 }
 
 export const useRunviewStore = defineStore('runview', {
@@ -57,7 +58,8 @@ export const useRunviewStore = defineStore('runview', {
       progressResult: initialProgressResult,
       systemStatus: initialSystemStatus,
       dataList: [],
-      result: result
+      result: result,
+      isReseting: false
     }
   },
   actions: {
@@ -84,12 +86,33 @@ export const useRunviewStore = defineStore('runview', {
     },
     async resetAll(): Promise<any> {
       const res = resetAll()
-      localStorage.setItem('graphbench_dataInfo', '');
-      localStorage.setItem('graphbench_systemInfo', '');
-      localStorage.setItem('graphbench_modeInfo', '');
-      localStorage.setItem('graphbench_systemStatus', '');
-      localStorage.setItem('graphbench_progressResult', '');
-      localStorage.setItem('graphbench_result', '');
+      this.updateDataInfo({ data: '' })
+      this.updateModeInfo({ mode: 'validate' })
+      this.updateSystemInfo({
+        model: '',
+        os: '',
+        cpu: '',
+        memory: '',
+        storage: '',
+        network: ''
+      })
+      this.updateSystemStatus({ uuid: '' })
+      this.updateProgressResult({
+        status: '',
+        duration: 0,
+        progress: 0,
+        num_lines: 0,
+        phase: '',
+        logs: []
+      })
+      this.updateResult({
+        "duration": 0,
+        "warmup": 0,
+        "ops": 0,
+        "query_on_time": 0,
+        "throughput": 0,
+        "detail": []
+      })
       return res
     },
     updateDataInfo(newDataInfo: { data: string }) {
@@ -108,11 +131,13 @@ export const useRunviewStore = defineStore('runview', {
       this.systemStatus = newSystemStatus
       localStorage.setItem('graphbench_systemStatus', JSON.stringify(newSystemStatus))
     },
-    updateProgressResult(newProgressResult: ProgressResult, isInit?: boolean) {
+    updateProgressResult(newProgressResult: ProgressResult) {
       let n = newProgressResult.num_lines - this.progressResult.num_lines
-      let logs = [...this.progressResult.logs, ...newProgressResult.logs.slice(-n)]
-      if (isInit) {
-        logs = []
+      let logs: any[] = []
+      if (newProgressResult.num_lines > 0) {
+        logs = [...this.progressResult.logs, ...newProgressResult.logs.slice(-n)]
+      } else {
+        logs = [...this.progressResult.logs]
       }
       newProgressResult.logs = logs
       this.progressResult = newProgressResult
@@ -121,6 +146,9 @@ export const useRunviewStore = defineStore('runview', {
     updateResult(newResult: FinResult) {
       this.result = newResult
       localStorage.setItem('graphbench_result', JSON.stringify(newResult))
+    },
+    updateIsReseting(status: boolean) {
+      this.isReseting = status
     }
   }
 });

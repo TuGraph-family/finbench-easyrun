@@ -3,7 +3,13 @@
         <div>
             <div class="progress-title">
                 <span>
-                    执行进度：
+                    执行状态：
+                </span>
+                <span>
+                    {{ status }}
+                </span>
+                <span style="margin-left:0.9375rem ;">
+                    当前步骤：
                 </span>
                 <span>
                     {{ phase }}
@@ -22,6 +28,7 @@ const runviewStore = useRunviewStore()
 let uuid = runviewStore.systemStatus.uuid
 let progress = computed(() => runviewStore.progressResult.progress)
 let phase = computed(() => runviewStore.progressResult.phase)
+let status = computed(() => runviewStore.progressResult.status)
 let timer: any = 0
 async function getProgress() {
     let startTime = Date.now()

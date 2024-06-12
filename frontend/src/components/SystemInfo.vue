@@ -57,7 +57,8 @@
             </el-form>
             <template #footer>
                 <div class="dialog-footer">
-                    <el-button @click="resetSystem()" type="danger">重置系统</el-button>
+                    <el-button v-if="isReseting" loading :disabled="true" type="danger">重置系统</el-button>
+                    <el-button v-else="isReseting" @click="resetSystem()" type="danger">重置系统</el-button>
                     <el-button @click="resetForm(ruleFormRef)">取消</el-button>
                     <el-button type="primary" @click="submitForm(ruleFormRef)"> 确认</el-button>
                 </div>
@@ -100,6 +101,9 @@ const rules = reactive<FormRules<SystemInfo>>({
     network: [
         { required: true, message: '请填写网络信息', trigger: 'blur' },
     ],
+})
+const isReseting = computed(() => {
+    return runviewStore.isReseting
 })
 const isSystemInfoComplete = computed(() => {
     const { model, os, cpu, memory, storage, network } = runviewStore.systemInfo
