@@ -7,10 +7,12 @@
 
 from flask import Flask, request
 from flask_cors import CORS
-import utils
 import os
+import re
+import utils
 import server
 import uuid
+import threading
 
 app = Flask(__name__)
 CORS(app, resources=r"/*")
@@ -69,19 +71,22 @@ def start_test():
     task_id = str(uuid.uuid4())
     if mode == 'validate':
         server.logger.info('start validate')
-        run_validate()
+        server.current_mode = "validate"
+        server.current_dataset = "sf1"
+        thread = threading.Thread(target=run_validate)
+        thread.start()
+        # run_validate()
         return wrap_data({"status": "ok", "message": "", "uuid": task_id})
     elif mode == 'benchmark':
-        server.logger.info('Start benchmark')
+        server.logger.info('start benchmark')
+        server.current_mode = "benchmark"
+        server.current_dataset = "sf10"
         run_benchmark()
         return wrap_data({"status": "ok", "message": "", "uuid": task_id})
     else:
         return wrap_data(RESP_FAILED_TMPL.update({'message': 'illegal test mode'}))
     
 def run_validate():
-    server.mode = "validate"
-    server.current_dataset = "sf1"
-    
     # load dataset sf1
     server.current_phase = "Loading dataset sf1"
     server.logger.info('Loading dataset sf1')
@@ -116,7 +121,7 @@ def run_validate():
     server.logger.info('validation started')
 
 def run_benchmark():
-    server.mode = "benchmark"
+    server.current_mode = "benchmark"
     server.current_dataset = "sf10"
     
     # load dataset sf1
@@ -156,23 +161,35 @@ def run_benchmark():
 
 @app.route('/progress', methods=['POST'])
 def progress():
-    if server.mode == "validate":
+    if server.current_mode == "validate":
         return progress_validate()
-    elif server.mode == "benchmark":
+    elif server.current_mode == "benchmark":
         return progress_benchmark()
     else:
         return wrap_data(RESP_FAILED_TMPL.update({'message': 'Incorrect mode'}))
 
 def progress_validate():
+    result = {}
+    result['mode'] = server.current_mode
+    result['dataset'] = server.current_dataset
+    result['phase'] = server.current_phase
+    result['status'] = 'running'
+    result['progress'] = 0.0
     log_file = "../scripts/validate_sf1.log"
-    if not os.path.exists(log_file):
-        return wrap_data(RESP_FAILED_TMPL.update({'message': 'Log file not found yet'}))
-    with open(log_file, 'r') as f:
-        logs = f.readlines()
-        server.logger.info("{} lines in log file read".format(len(logs)))
-        last_loglines = logs[-300:]
-        last_logline = logs[-1]
-    return wrap_data(RESPONSE_OK)
+    if os.path.exists(log_file):
+        with open(log_file, 'r') as f:
+            logs = f.readlines()
+            result['num_lines'] = len(logs)
+            result['logs'] = logs[-300:]
+            matches = re.findall(r"Processed ([\d,]+) / 10,000", "\n".join(logs[-300:]))
+            if matches:
+                last_match = matches[-1]
+                processed = int(last_match.replace(',', ''))
+                progress = round(processed / 100.0, 2)
+                result['progress'] = progress
+                if progress == 100.0:
+                    result['status'] = 'completed'
+    return wrap_data(result)
 
 def progress_benchmark():
     log_file = "../scripts/benchmark_sf10.log"
@@ -204,6 +221,10 @@ def reset_all():
 
 def server_init():
     utils.start_finbench_dockers()
+    logs = ["../scripts/validate_sf1.log", "../scripts/benchmark_sf10.log"]
+    for log in logs:
+        if os.path.exists(log):
+            os.remove(log)
 
     
 def server_destroy():
