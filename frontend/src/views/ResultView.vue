@@ -26,7 +26,7 @@ async function getResult() {
 function back() {
   router.push({ name: 'easyrun' });
 }
-if (runviewStore.progressResult.phase === 'completed') {
+if (runviewStore.progressResult.phase === 'Completed') {
   getResult()
 }
 </script>

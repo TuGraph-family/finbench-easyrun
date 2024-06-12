@@ -36,7 +36,7 @@ async function getProgress() {
         let res: any;
         res = await runviewStore.getProgress(uuid);
         runviewStore.updateProgressResult(res);
-        if (res.status === 'completed') {
+        if (res.status === 'Completed') {
             clearInterval(timer);
         }
     }, 1000);

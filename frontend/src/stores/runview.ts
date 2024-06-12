@@ -46,7 +46,7 @@ export const useRunviewStore = defineStore('runview', {
       uuid: ''
     };
     let result: any
-    if (initialProgressResult.status === 'completed') {
+    if (initialProgressResult.status === 'Completed') {
       result = JSON.parse(localStorage.getItem('graphbench_result') as string)
     } else {
       result = null
@@ -85,14 +85,13 @@ export const useRunviewStore = defineStore('runview', {
       return res
     },
     async resetAll(): Promise<any> {
-      const res = resetAll()
       this.updateDataInfo({ data: '' })
       this.updateModeInfo({ mode: 'validate' })
       this.updateSystemInfo({
         model: '',
-        os: '',
-        cpu: '',
-        memory: '',
+        os: 'UOS Server 20',
+        cpu: 'Phytium FTC662 64c',
+        memory: '256GiB',
         storage: '',
         network: ''
       })
@@ -113,6 +112,7 @@ export const useRunviewStore = defineStore('runview', {
         "throughput": 0,
         "detail": []
       })
+      const res = resetAll()
       return res
     },
     updateDataInfo(newDataInfo: { data: string }) {
@@ -137,7 +137,8 @@ export const useRunviewStore = defineStore('runview', {
       if (newProgressResult.num_lines > 0) {
         logs = [...this.progressResult.logs, ...newProgressResult.logs.slice(-n)]
       } else {
-        logs = [...this.progressResult.logs]
+        let data_logs = newProgressResult.logs || []
+        logs = [...data_logs]
       }
       newProgressResult.logs = logs
       this.progressResult = newProgressResult

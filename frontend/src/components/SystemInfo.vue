@@ -131,8 +131,10 @@ const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.resetFields()
 }
-const resetSystem = () => {
-    runviewStore.resetAll();
+async function resetSystem() {
+    runviewStore.updateIsReseting(true)
+    await runviewStore.resetAll();
+    runviewStore.updateIsReseting(false)
 }
 
 </script>

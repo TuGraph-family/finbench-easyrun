@@ -15,8 +15,9 @@
     <div v-if="isSystemStart">
       <Logs />
     </div>
-    <div v-if="isCompleted && mode == 'benchmark'" class="result-btn">
-      <el-button size="large" type="success" @click="open">查看结果</el-button>
+    <div v-if="isCompleted" class="result-btn">
+      <el-button v-if="mode == 'benchmark'" size="large" type="success" @click="open">查看结果</el-button>
+      <el-tag size="large" v-else>{{ isCompleted ? '验证通过' : '验证失败' }}</el-tag>
     </div>
   </div>
 </template>
@@ -43,7 +44,7 @@ const isSystemStart = computed(() => {
 })
 const isCompleted = computed(() => {
   const { status } = runviewStore.progressResult
-  return status === 'completed' ? true : false
+  return status === 'Completed' ? true : false
 })
 
 const mode = computed(() => {
