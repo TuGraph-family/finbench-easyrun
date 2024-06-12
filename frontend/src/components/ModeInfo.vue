@@ -26,7 +26,7 @@
             </template>
             <div class="star-btn">
                 <el-button type="warning"
-                    :disabled="runviewStore.systemStatus.uuid && runviewStore.progressResult.phase !== 'completed' ? true : false"
+                    :disabled="runviewStore.systemStatus.uuid && runviewStore.progressResult.status !== 'completed' ? true : false"
                     @click="start">启 动</el-button>
             </div>
         </div>
@@ -62,7 +62,7 @@ async function start() {
 }
 function clear() {
     let initData = {
-        "phase": "",
+        "status": "",
         "duration": 0,
         "progress": 0,
         "logs": {}

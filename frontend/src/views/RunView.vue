@@ -42,8 +42,8 @@ const isSystemStart = computed(() => {
   return !!uuid
 })
 const isCompleted = computed(() => {
-  const { phase } = runviewStore.progressResult
-  return phase === 'completed' ? true : false
+  const { status } = runviewStore.progressResult
+  return status === 'completed' ? true : false
 })
 
 const mode = computed(() => {

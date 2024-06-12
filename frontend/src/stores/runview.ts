@@ -42,7 +42,7 @@ export const useRunviewStore = defineStore('runview', {
       uuid: ''
     };
     let result: any
-    if (initialProgressResult.phase === 'completed') {
+    if (initialProgressResult.status === 'completed') {
       result = JSON.parse(localStorage.getItem('graphbench_result') as string)
     } else {
       result = null
@@ -82,7 +82,7 @@ export const useRunviewStore = defineStore('runview', {
     async getTestProgress(uuid: string, startTime: number): Promise<ProgressResult> {
       const DEFAULT_DURATION = 20;
       const data: ProgressResult = {
-        phase: 'in_progress',
+        status: 'in_progress',
         duration: 0,
         progress: 0,
         logs: {}
@@ -106,7 +106,7 @@ export const useRunviewStore = defineStore('runview', {
         const logTime = new Date().toISOString();
         data.logs[logTime] = randomLog;
         if (progress >= 100) {
-          data.phase = 'completed';
+          data.status = 'completed';
         }
         resolve(data)
       });

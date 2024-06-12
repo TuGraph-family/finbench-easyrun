@@ -6,7 +6,7 @@
                     执行进度：
                 </span>
                 <span>
-                    {{ phase }}
+                    {{ status }}
                 </span>
             </div>
             <div>
@@ -21,20 +21,20 @@ import { useRunviewStore } from '@/stores/runview';
 const runviewStore = useRunviewStore()
 let uuid = runviewStore.systemStatus.uuid
 let progress = computed(() => runviewStore.progressResult.progress)
-let phase = computed(() => runviewStore.progressResult.phase)
-let timer:any = 0
+let status = computed(() => runviewStore.progressResult.status)
+let timer: any = 0
 async function getProgress() {
-    
+
     let startTime = Date.now()
     timer = setInterval(async () => {
         let res: any;
         if (uuid !== 'test_uuid') {
             res = await runviewStore.getProgress(uuid);
         } else {
-            res = await runviewStore.getTestProgress(uuid,startTime);
+            res = await runviewStore.getTestProgress(uuid, startTime);
         }
         runviewStore.updateProgressResult(res);
-        if (res.phase === 'completed') {
+        if (res.status === 'completed') {
             clearInterval(timer);
         }
     }, 1000);
@@ -42,7 +42,7 @@ async function getProgress() {
 onUnmounted(() => {
     clearInterval(timer);
 });
-if(runviewStore.progressResult.phase !== 'completed'){
+if (runviewStore.progressResult.status !== 'completed') {
     getProgress()
 }
 
@@ -52,7 +52,8 @@ if(runviewStore.progressResult.phase !== 'completed'){
 .progress {
     padding: 0 1.875rem 0.875rem 1.875rem;
     width: calc(100% - 3.75rem);
-    .progress-title{
+
+    .progress-title {
         display: flex;
         align-items: center;
         font-weight: 700;
