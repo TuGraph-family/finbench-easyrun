@@ -57,7 +57,7 @@ function draw() {
                 data: [
                     {
                         value: throughput.value,
-                        name: 'SCORE'
+                        name: 'THROUGHPUT'
                     }
                 ]
             }
