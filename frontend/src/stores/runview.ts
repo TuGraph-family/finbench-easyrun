@@ -86,7 +86,8 @@ export const useRunviewStore = defineStore('runview', {
     },
     async resetAll(): Promise<any> {
       this.updateDataInfo({ data: '' })
-      this.updateModeInfo({ mode: 'validate' })
+      let modeInfo = this.modeInfo
+      this.updateModeInfo(modeInfo)
       this.updateSystemInfo({
         model: '',
         os: 'UOS Server 20',

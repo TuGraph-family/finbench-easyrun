@@ -39,7 +39,7 @@ const isSystemInfoComplete = computed(() => {
 })
 const isSystemStart = computed(() => {
   const { uuid } = runviewStore.systemStatus
-  return !!uuid
+  return uuid ? true : false
 })
 const isCompleted = computed(() => {
   const { status } = runviewStore.progressResult
