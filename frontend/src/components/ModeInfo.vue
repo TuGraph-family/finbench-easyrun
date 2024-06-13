@@ -25,8 +25,8 @@
                 </div>
             </template>
             <div class="star-btn">
-                <el-button type="warning" :disabled="runviewStore.systemStatus.uuid ? true : false" @click="start">启
-                    动</el-button>
+                <el-button type="warning" :disabled="runviewStore.systemStatus.uuid ? true : false"
+                    @click="start">启动</el-button>
             </div>
         </div>
     </div>

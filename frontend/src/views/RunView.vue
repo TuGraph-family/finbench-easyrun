@@ -9,10 +9,10 @@
     <div v-if="isSystemInfoComplete">
       <ModeInfo />
     </div>
-    <div v-if="isSystemStart">
+    <div>
       <Progress />
     </div>
-    <div v-if="isSystemStart">
+    <div style="height: calc(100% - 470px);">
       <Logs />
     </div>
     <div v-if="isCompleted" class="result-btn">
@@ -59,8 +59,13 @@ function open() {
 
 <style scoped lang="less">
 .run {
+  width: 100%;
+  height: 100%;
 
   .result-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 0px;
     padding: 0 1.875rem;
     display: flex;
     justify-content: flex-end;

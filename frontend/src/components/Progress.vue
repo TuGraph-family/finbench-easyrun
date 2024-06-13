@@ -23,16 +23,19 @@
     </div>
 </template>
 <script setup lang="ts">
-import { computed, onUnmounted } from 'vue'
+import { computed, onUnmounted, watch } from 'vue'
 import { useRunviewStore } from '@/stores/runview';
 const runviewStore = useRunviewStore()
 let uuid = runviewStore.systemStatus.uuid
 let progress = computed(() => runviewStore.progressResult.progress)
 let phase = computed(() => runviewStore.progressResult.phase)
 let status = computed(() => runviewStore.progressResult.status)
+let isReseting = computed(() => runviewStore.isReseting)
 let timer: any = 0
+watch(isReseting, () => {
+    clearInterval(timer);
+})
 async function getProgress() {
-    let startTime = Date.now()
     timer = setInterval(async () => {
         let res: any;
         res = await runviewStore.getProgress(uuid);
