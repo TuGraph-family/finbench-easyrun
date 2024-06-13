@@ -16,7 +16,7 @@ watch(result, () => {
     draw()
 })
 onMounted(() => {
-    myChart = echarts.init(pieRef.value,'dark');
+    myChart = echarts.init(pieRef.value, 'dark');
     console.log(result.value)
     if (result.value) {
 
@@ -33,6 +33,7 @@ function draw() {
         pieData.push(obj)
     })
     myChart.setOption({
+        backgroundColor: '#333333',
         legend: {
             type: 'scroll'
         },
@@ -51,6 +52,7 @@ function draw() {
     height: 400px;
     text-align: center;
     padding: 10px;
+
     >#PieCanvas {
         width: 100%;
         height: 100%;

@@ -13,7 +13,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, watch, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useRunviewStore } from '@/stores/runview'
 import * as echarts from 'echarts'
 const runviewStore = useRunviewStore()
@@ -24,20 +24,34 @@ let runtime = computed(() => runviewStore.progressResult.runtime)
 let operations = computed(() => runviewStore.progressResult.operations)
 let default_max = ref(100)
 let max = ref(0)
+let resizeObserver: ResizeObserver | null = null
 watch(throughput, () => {
     if (throughput.value > max.value) {
         max.value = throughput.value
     }
     draw()
 })
-onMounted(() => {
+onMounted(async () => {
+    await nextTick()
     let width = Gauge.value?.clientWidth
-    let height = Gauge.value?.clientHeight as number
+    let height = Gauge.value?.clientHeight
+    console.log(width, height)
     myChart_1 = echarts.init(Gauge.value, 'dark', { width: width, height: height });
     draw()
+    resizeObserver = new ResizeObserver(() => {
+        resizeChart()
+    })
+    if (Gauge.value) {
+        resizeObserver.observe(Gauge.value)
+    }
+
+    // 添加窗口大小变化的监听器作为后备
+    window.addEventListener('resize', resizeChart)
+    window.addEventListener('resize', resizeChart)
 })
 function draw() {
     let option = {
+        backgroundColor: '#333333',
         tooltip: {
             formatter: '{a} <br/>{b} : {c}%'
         },
@@ -65,6 +79,20 @@ function draw() {
     };
     myChart_1.setOption(option);
 }
+function resizeChart() {
+    if (myChart_1) {
+        let width = Gauge.value?.clientWidth
+        let height = Gauge.value?.clientHeight
+        myChart_1.resize({ width, height })
+    }
+}
+onBeforeUnmount(() => {
+    // 移除窗口大小变化的监听器
+    window.removeEventListener('resize', resizeChart)
+    if (myChart_1) {
+        myChart_1.dispose()
+    }
+})
 </script>
 
 <style scoped lang="less">
@@ -74,8 +102,10 @@ function draw() {
     height: 100%;
 
     #gauge {
+        border-radius: 8px;
         width: 100%;
-        height: 100%;
+        height: calc(100% - 45px);
+        overflow: hidden;
 
     }
 }

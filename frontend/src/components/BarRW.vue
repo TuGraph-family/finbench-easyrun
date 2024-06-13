@@ -19,8 +19,8 @@ watch(result, () => {
     draw()
 })
 onMounted(() => {
-    myChart_1 = echarts.init(barRWRef_1.value,'dark');
-    myChart_2 = echarts.init(barRWRef_2.value,'dark');
+    myChart_1 = echarts.init(barRWRef_1.value, 'dark');
+    myChart_2 = echarts.init(barRWRef_2.value, 'dark');
     if (result.value) {
         draw()
     }
@@ -50,6 +50,7 @@ function draw() {
     })
     myChart_1.setOption({
         legend: legend_1,
+        backgroundColor: '#333333',
         xAxis: [
             {
                 type: 'category',
@@ -68,6 +69,7 @@ function draw() {
     });
     myChart_2.setOption({
         legend: legend_2,
+        backgroundColor: '#333333',
         xAxis: [
             {
                 type: 'category',

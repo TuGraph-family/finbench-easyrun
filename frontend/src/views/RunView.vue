@@ -13,7 +13,7 @@
       <Progress />
     </div>
     <div v-if="isSystemStart" style="height: calc(100% - 470px);padding: 0 1.875rem;display: flex;position: relative;">
-      <div v-if="mode == 'benchmark'" style="width: 400px; height: calc(100% - 0.875rem);">
+      <div v-if="mode == 'benchmark'" style="width: 400px; height: calc(100% - 0.875rem);flex-shrink: 0;">
         <Gauge />
       </div>
       <div style="flex-grow: 1;">
