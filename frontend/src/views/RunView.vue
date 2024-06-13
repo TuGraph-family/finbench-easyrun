@@ -9,10 +9,10 @@
     <div v-if="isSystemInfoComplete">
       <ModeInfo />
     </div>
-    <div>
+    <div v-if="isSystemStart">
       <Progress />
     </div>
-    <div style="height: calc(100% - 470px);">
+    <div v-if="isSystemStart" style="height: calc(100% - 470px);">
       <Logs />
     </div>
     <div v-if="isCompleted" class="result-btn">
