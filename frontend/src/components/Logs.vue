@@ -26,8 +26,8 @@ watch(logs, async () => {
 
 <style scoped lang="less">
 .logs {
-    padding: 0 1.875rem 0.875rem 1.875rem;
-    width: calc(100% - 3.75rem);
+    padding: 0 0 0.875rem 0.875rem;
+    width: calc(100% - 0.875rem);
     height: 100%;
 
     .logs-title {

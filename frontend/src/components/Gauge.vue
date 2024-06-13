@@ -32,7 +32,7 @@ watch(throughput, () => {
 })
 onMounted(() => {
     let width = Gauge.value?.clientWidth
-    let height = Gauge.value?.clientHeight
+    let height = Gauge.value?.clientHeight as number
     myChart_1 = echarts.init(Gauge.value, 'dark', { width: width, height: height });
     draw()
 })

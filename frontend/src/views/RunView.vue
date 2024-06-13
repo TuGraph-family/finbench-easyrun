@@ -12,17 +12,18 @@
     <div v-if="isSystemStart">
       <Progress />
     </div>
-    <div v-if="isSystemStart" style="height: calc(100% - 470px);padding: 0 1.875rem;display: flex;">
-      <div v-if="mode == 'benchmark'" style="width: 400px; height: 100%;">
+    <div v-if="isSystemStart" style="height: calc(100% - 470px);padding: 0 1.875rem;display: flex;position: relative;">
+      <div v-if="mode == 'benchmark'" style="width: 400px; height: calc(100% - 0.875rem);">
         <Gauge />
       </div>
       <div style="flex-grow: 1;">
         <Logs />
       </div>
+      <div v-if="isCompleted" class="result-btn">
+        <el-button v-if="mode == 'benchmark'" size="large" type="success" @click="open">查看结果</el-button>
+      </div>
     </div>
-    <div v-if="isCompleted" class="result-btn">
-      <el-button v-if="mode == 'benchmark'" size="large" type="success" @click="open">查看结果</el-button>
-    </div>
+
   </div>
 </template>
 
@@ -70,7 +71,7 @@ function open() {
 
   .result-btn {
     position: absolute;
-    bottom: 10px;
+    top: 0px;
     right: 0px;
     padding: 0 1.875rem;
     display: flex;
