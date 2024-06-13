@@ -38,17 +38,19 @@ watch(isReseting, () => {
 async function getProgress() {
     timer = setInterval(async () => {
         let res: any;
-        res = await runviewStore.getProgress(uuid);
-        runviewStore.updateProgressResult(res);
-        if (res.status === 'Completed') {
-            clearInterval(timer);
+        if (uuid) {
+            res = await runviewStore.getProgress(uuid);
+            runviewStore.updateProgressResult(res);
+            if (res.status === 'Completed') {
+                clearInterval(timer);
+            }
         }
     }, 1000);
 }
 onUnmounted(() => {
     clearInterval(timer);
 });
-if (runviewStore.progressResult.status !== 'Completed') {
+if (runviewStore.progressResult.status !== 'Completed' && uuid) {
     getProgress()
 }
 
