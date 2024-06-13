@@ -14,6 +14,7 @@
                 <span>
                     {{ phase }}
                 </span>
+                <el-tag style="margin-left: 0.9375rem;" size="large" v-if="status == 'Completed'">验证通过</el-tag>
             </div>
             <div>
                 <el-progress :percentage="progress" />
@@ -44,7 +45,7 @@ async function getProgress() {
 onUnmounted(() => {
     clearInterval(timer);
 });
-if (runviewStore.progressResult.status !== 'completed') {
+if (runviewStore.progressResult.status !== 'Completed') {
     getProgress()
 }
 

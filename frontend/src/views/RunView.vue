@@ -17,7 +17,6 @@
     </div>
     <div v-if="isCompleted" class="result-btn">
       <el-button v-if="mode == 'benchmark'" size="large" type="success" @click="open">查看结果</el-button>
-      <el-tag size="large" v-else>{{ isCompleted ? '验证通过' : '验证失败' }}</el-tag>
     </div>
   </div>
 </template>
@@ -60,6 +59,7 @@ function open() {
 
 <style scoped lang="less">
 .run {
+
   .result-btn {
     padding: 0 1.875rem;
     display: flex;

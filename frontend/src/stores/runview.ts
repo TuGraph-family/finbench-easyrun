@@ -134,7 +134,7 @@ export const useRunviewStore = defineStore('runview', {
     updateProgressResult(newProgressResult: ProgressResult) {
       let n = newProgressResult.num_lines - this.progressResult.num_lines
       let logs: any[] = []
-      if (newProgressResult.num_lines > 0) {
+      if (newProgressResult.num_lines > 0 && n > 0) {
         logs = [...this.progressResult.logs, ...newProgressResult.logs.slice(-n)]
       } else {
         let data_logs = newProgressResult.logs || []
