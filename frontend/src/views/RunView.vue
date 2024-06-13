@@ -12,8 +12,13 @@
     <div v-if="isSystemStart">
       <Progress />
     </div>
-    <div v-if="isSystemStart" style="height: calc(100% - 470px);">
-      <Logs />
+    <div v-if="isSystemStart" style="height: calc(100% - 470px);padding: 0 1.875rem;display: flex;">
+      <div v-if="mode == 'benchmark'" style="width: 400px; height: 100%;">
+        <Gauge />
+      </div>
+      <div style="flex-grow: 1;">
+        <Logs />
+      </div>
     </div>
     <div v-if="isCompleted" class="result-btn">
       <el-button v-if="mode == 'benchmark'" size="large" type="success" @click="open">查看结果</el-button>
@@ -28,6 +33,7 @@ import Header from '../components/Header.vue'
 import SystemInfo from '@/components/SystemInfo.vue'
 import ModeInfo from '@/components/ModeInfo.vue'
 import Progress from '@/components/Progress.vue'
+import Gauge from '@/components/Gauge.vue'
 import Logs from '@/components/Logs.vue'
 import { useRunviewStore } from '../stores/runview'
 import { useRouter } from 'vue-router';

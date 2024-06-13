@@ -35,6 +35,11 @@ let timer: any = 0
 watch(isReseting, () => {
     clearInterval(timer);
 })
+watch(status, () => {
+    if (status.value === 'Failed') {
+        clearInterval(timer)
+    }
+})
 async function getProgress() {
     timer = setInterval(async () => {
         let res: any;
@@ -50,7 +55,7 @@ async function getProgress() {
 onUnmounted(() => {
     clearInterval(timer);
 });
-if (runviewStore.progressResult.status !== 'Completed' && uuid) {
+if (runviewStore.progressResult.status !== 'Completed' && runviewStore.progressResult.status !== 'Failed' && uuid) {
     getProgress()
 }
 

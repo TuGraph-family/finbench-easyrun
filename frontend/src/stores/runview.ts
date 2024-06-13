@@ -73,6 +73,9 @@ export const useRunviewStore = defineStore('runview', {
     },
     async getProgress(uuid: string): Promise<ProgressResult> {
       const res = await progress(uuid)
+      res.runtime = res.runtime || 0
+      res.operations = res.operations || 0
+      res.throughput = res.throughput || 0
       return res
 
     },
@@ -103,6 +106,9 @@ export const useRunviewStore = defineStore('runview', {
         progress: 0,
         num_lines: 0,
         phase: '',
+        runtime: 0,
+        operations: 0,
+        throughput: 0,
         logs: []
       })
       this.updateResult({

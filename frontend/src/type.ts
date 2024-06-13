@@ -42,6 +42,9 @@ export type ProgressResult = {
     "progress": number,
     "num_lines": number,
     "phase": string,
+    "runtime": number,
+    "operations": number,
+    "throughput": number,
     "logs": Array<string>
 }
 

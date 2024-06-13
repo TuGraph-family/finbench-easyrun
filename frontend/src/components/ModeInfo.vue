@@ -64,7 +64,10 @@ function clear() {
         "progress": 0,
         "logs": [],
         "num_lines": 0,
-        "phase": ''
+        "phase": '',
+        runtime: 0,
+        operations: 0,
+        throughput: 0,
     }
     runviewStore.updateProgressResult(initData);
 }
