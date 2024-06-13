@@ -28,6 +28,7 @@ watch(logs, async () => {
 .logs {
     padding: 0 1.875rem 0.875rem 1.875rem;
     width: calc(100% - 3.75rem);
+    height: 100%;
 
     .logs-title {
         display: flex;
@@ -40,7 +41,7 @@ watch(logs, async () => {
     }
 
     .logs-container {
-        height: 300px;
+        height: calc(100% - 60px);
         background-color: #333333;
         border-radius: 0.5rem;
         overflow-y: auto;
