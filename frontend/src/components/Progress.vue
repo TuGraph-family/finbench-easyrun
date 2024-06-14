@@ -76,6 +76,13 @@ if (runviewStore.progressResult.status !== 'Completed' && runviewStore.progressR
         border-bottom: 1px dotted #424242;
         font-size: 1.125rem;
         margin-bottom: 0.625rem;
+        position: relative;
+    }
+
+    .el-tag {
+        position: absolute;
+        right: 0;
+        width: 160px;
     }
 }
 </style>

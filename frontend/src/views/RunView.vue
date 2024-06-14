@@ -13,14 +13,15 @@
       <Progress />
     </div>
     <div v-if="isSystemStart" style="height: calc(100% - 470px);padding: 0 1.875rem;display: flex;position: relative;">
-      <div v-if="mode == 'benchmark'" style="width: 400px; height: calc(100% - 0.875rem);flex-shrink: 0;">
+      <div v-if="mode == 'benchmark'"
+        style="width: 400px; height: calc(100% - 0.875rem) ;margin-right: 0.875rem;flex-shrink: 0;">
         <Gauge />
       </div>
       <div style="flex-grow: 1;">
         <Logs />
       </div>
       <div v-if="isCompleted" class="result-btn">
-        <el-button v-if="mode == 'benchmark'" size="large" type="success" @click="open">查看结果</el-button>
+        <el-button v-if="mode == 'benchmark'" size="" type="success" @click="open">查看结果</el-button>
       </div>
     </div>
 
@@ -78,7 +79,7 @@ function open() {
     justify-content: flex-end;
 
     .el-button {
-      width: 200px;
+      width: 160px;
     }
   }
 }
