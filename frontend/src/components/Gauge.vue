@@ -69,7 +69,7 @@ function draw() {
                 data: [
                     {
                         value: Math.round(throughput.value),
-                        name: 'THROUGHPUT'
+                        name: '吞吐率(QPS)'
                     }
                 ]
             }
