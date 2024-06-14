@@ -17,29 +17,50 @@ watch(result, () => {
 })
 onMounted(() => {
     myChart = echarts.init(pieRef.value, 'dark');
-    console.log(result.value)
     if (result.value) {
         draw()
     }
 })
 function draw() {
     pieData = []
-    debugger
+    let n = 0.1
+    let total_count = result.value.total_count
     result.value.all_metrics.forEach(item => {
-        let obj = {
-            name: item.name,
-            value: item.count
+        let obj: any = {}
+        if (item.count > total_count * n) {
+            obj = {
+                name: item.name,
+                value: item.count
+            }
+            pieData.push(obj)
+        } else {
+            let current_ohter = pieData.find(item => item.name == 'other')
+            if (current_ohter) {
+                let current_count = current_ohter ? current_ohter.value : 0
+                current_ohter = {
+                    name: 'other',
+                    value: current_count + item.count
+                }
+            } else {
+                obj = {
+                    name: 'other',
+                    value: item.count
+                }
+                pieData.push(obj)
+            }
         }
-        pieData.push(obj)
     })
     myChart.setOption({
         backgroundColor: '#333333',
         legend: {
             type: 'scroll'
         },
+        tooltip: {
+            trigger: 'item'
+        },
         series: [{
             type: 'pie',
-            data: pieData
+            data: pieData.reverse()
         }]
     });
 }
