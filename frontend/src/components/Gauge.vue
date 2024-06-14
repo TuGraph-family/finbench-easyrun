@@ -27,7 +27,7 @@ let max = ref(0)
 let resizeObserver: ResizeObserver | null = null
 watch(throughput, () => {
     if (throughput.value > max.value) {
-        max.value = throughput.value
+        max.value = Math.round(throughput.value)
     }
     draw()
 })
@@ -44,9 +44,7 @@ onMounted(async () => {
     if (Gauge.value) {
         resizeObserver.observe(Gauge.value)
     }
-
     // 添加窗口大小变化的监听器作为后备
-    window.addEventListener('resize', resizeChart)
     window.addEventListener('resize', resizeChart)
 })
 function draw() {
@@ -70,7 +68,7 @@ function draw() {
                 max: max.value || default_max.value,
                 data: [
                     {
-                        value: throughput.value,
+                        value: Math.round(throughput.value),
                         name: 'THROUGHPUT'
                     }
                 ]

@@ -19,7 +19,6 @@ onMounted(() => {
     myChart = echarts.init(pieRef.value, 'dark');
     console.log(result.value)
     if (result.value) {
-
         draw()
     }
 })
