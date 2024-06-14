@@ -14,7 +14,8 @@
                 <span>
                     {{ phase }}
                 </span>
-                <el-tag style="margin-left: 0.9375rem;" size="large" v-if="status == 'Completed'">验证通过</el-tag>
+                <el-tag style="margin-left: 0.9375rem;" size="large"
+                    v-if="status == 'Completed' && mode == 'validate'">验证通过</el-tag>
             </div>
             <div>
                 <el-progress :percentage="progress" />
@@ -31,6 +32,7 @@ let progress = computed(() => runviewStore.progressResult.progress)
 let phase = computed(() => runviewStore.progressResult.phase)
 let status = computed(() => runviewStore.progressResult.status)
 let isReseting = computed(() => runviewStore.isReseting)
+let mode = computed(() => runviewStore.modeInfo.mode)
 let timer: any = 0
 watch(isReseting, () => {
     clearInterval(timer);
