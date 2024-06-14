@@ -6,7 +6,7 @@
                 运行时长：{{ runtime }}
             </span>
             <span>
-                OP数：{{ operations }}
+                查询数：{{ operations }}
             </span>
         </div>
         <div id="gauge" ref="Gauge"></div>
