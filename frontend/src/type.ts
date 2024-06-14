@@ -78,10 +78,9 @@ interface Detail {
 }
 
 export interface FinResult {
-    "duration": number,
-    "warmup": number,
-    "ops": number,
+    "total_duration": number,
+    "total_count": number,
     "query_on_time": number,
     "throughput": number,
-    "detail": Array<Detail>
+    "all_metrics": Array<Detail>
 }

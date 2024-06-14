@@ -2,9 +2,9 @@
     <div class="performance">
         <div class="performance-title">性能测试结果</div>
         <div class="performance-list">
-            <div>测试耗时：{{ result?.duration }} </div>
-            <div>热身查询数：{{ result?.warmup }}</div>
-            <div>总查询数：{{ result?.ops }} </div>
+            <div>测试耗时：{{ Math.round(result?.total_duration) }} </div>
+            <!-- <div>热身查询数：{{ result?.warmup }}</div> -->
+            <div>总查询数：{{ result?.total_count }} </div>
             <div>及时率：{{ result?.query_on_time }} </div>
             <div>性能吞吐：{{ result?.throughput }} </div>
         </div>

@@ -21,17 +21,22 @@ async function getResult() {
   const { uuid } = runviewStore.systemStatus
   let res: any
   res = await runviewStore.getResult(uuid)
+  console.log(res)
   runviewStore.updateResult(res)
 }
 function back() {
   router.push({ name: 'easyrun' });
 }
-if (runviewStore.progressResult.phase === 'Completed') {
+if (runviewStore.progressResult.status === 'Completed') {
   getResult()
 }
 </script>
 <style lang="less" scoped>
 .result {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+
   .result-header {
     height: 3.75rem;
     background-color: #333333;

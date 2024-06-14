@@ -30,8 +30,8 @@ function draw() {
     let legend_2: any = { data: [] }
     let series_1: any = []
     let series_2: any = []
-    result.value.detail.forEach(item => {
-        if (item.name.startsWith('W')) {
+    result.value.all_metrics.forEach(item => {
+        if (item.name.startsWith("Write")) {
             let obj_1 = {
                 name: item.name,
                 type: 'bar',

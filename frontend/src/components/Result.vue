@@ -44,6 +44,7 @@ watch(result, () => {
 
 <style scoped lang="less">
 .finbench-result {
+
     .performance-result,
     .performance-CR,
     .performance-SR,
@@ -52,7 +53,7 @@ watch(result, () => {
         border: 5px solid #ddd;
         border-radius: 8px;
         margin-top: 20px;
-        background-color: #100c2a;
+        background-color: #333333;
     }
 }
 </style>

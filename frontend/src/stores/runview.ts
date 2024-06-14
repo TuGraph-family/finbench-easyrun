@@ -81,7 +81,7 @@ export const useRunviewStore = defineStore('runview', {
     },
     async getResult(uuid: string): Promise<FinResult> {
       const res = await result(uuid)
-      return res
+      return JSON.parse(res)
     },
     async startTest(data: any): Promise<any> {
       const res = startTest(data)
@@ -112,12 +112,11 @@ export const useRunviewStore = defineStore('runview', {
         logs: []
       })
       this.updateResult({
-        "duration": 0,
-        "warmup": 0,
-        "ops": 0,
+        "total_duration": 0,
+        "total_count": 0,
         "query_on_time": 0,
         "throughput": 0,
-        "detail": []
+        "all_metrics": []
       })
       const res = resetAll()
       return res

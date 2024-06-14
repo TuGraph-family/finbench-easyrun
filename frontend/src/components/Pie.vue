@@ -24,7 +24,8 @@ onMounted(() => {
 })
 function draw() {
     pieData = []
-    result.value.detail.forEach(item => {
+    debugger
+    result.value.all_metrics.forEach(item => {
         let obj = {
             name: item.name,
             value: item.count
