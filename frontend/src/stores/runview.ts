@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import type { SystemInfo, DataInfo, ModeInfo, DataList, ProgressResult, SystemStatus, FinResult } from '../type'
-import { listDataset, startSut, progress, result, startTest } from '../service/service'
+import { listDataset, startSut, progress, result, startTest, resetAll } from '../service/service'
 interface State {
   systemInfo: SystemInfo;
   dataInfo: DataInfo,
@@ -9,6 +9,7 @@ interface State {
   progressResult: ProgressResult,
   systemStatus: SystemStatus,
   result: FinResult
+  isReseting: boolean
 }
 
 export const useRunviewStore = defineStore('runview', {
@@ -33,16 +34,19 @@ export const useRunviewStore = defineStore('runview', {
     };
     const sotreProgressResult = localStorage.getItem('graphbench_progressResult')
     const initialProgressResult: ProgressResult = sotreProgressResult ? JSON.parse(sotreProgressResult) : {
-      uuid: '',
-      status: 'stop',
-      logs: {}
+      status: '',
+      duration: 0,
+      progress: 0,
+      num_lines: 0,
+      phase: '',
+      logs: []
     };
     const sotreSystemStatus = localStorage.getItem('graphbench_systemStatus')
     const initialSystemStatus: SystemStatus = sotreSystemStatus ? JSON.parse(sotreSystemStatus) : {
       uuid: ''
     };
     let result: any
-    if (initialProgressResult.phase === 'completed') {
+    if (initialProgressResult.status === 'Completed') {
       result = JSON.parse(localStorage.getItem('graphbench_result') as string)
     } else {
       result = null
@@ -54,7 +58,8 @@ export const useRunviewStore = defineStore('runview', {
       progressResult: initialProgressResult,
       systemStatus: initialSystemStatus,
       dataList: [],
-      result: result
+      result: result,
+      isReseting: false
     }
   },
   actions: {
@@ -68,53 +73,53 @@ export const useRunviewStore = defineStore('runview', {
     },
     async getProgress(uuid: string): Promise<ProgressResult> {
       const res = await progress(uuid)
+      res.runtime = res.runtime || 0
+      res.operations = res.operations || 0
+      res.throughput = res.throughput || 0
       return res
 
     },
     async getResult(uuid: string): Promise<FinResult> {
       const res = await result(uuid)
-      return res
+      return JSON.parse(res)
     },
     async startTest(data: any): Promise<any> {
       const res = startTest(data)
       return res
     },
-    async getTestProgress(uuid: string, startTime: number): Promise<ProgressResult> {
-      const DEFAULT_DURATION = 20;
-      const data: ProgressResult = {
-        phase: 'in_progress',
+    async resetAll(): Promise<any> {
+      this.updateDataInfo({ data: '' })
+      let modeInfo = this.modeInfo
+      this.updateModeInfo(modeInfo)
+      this.updateSystemInfo({
+        model: '',
+        os: 'UOS Server 20',
+        cpu: 'Phytium FTC662 64c',
+        memory: '256GiB',
+        storage: '',
+        network: ''
+      })
+      this.updateSystemStatus({ uuid: '' })
+      this.updateProgressResult({
+        status: '',
         duration: 0,
         progress: 0,
-        logs: {}
-      };
-      function generateRandomLog(progress: number): string {
-        const logs = [
-          `INFO: System check completed. Progress: ${progress.toFixed(2)}%`,
-          `WARNING: Disk usage is high. Progress: ${progress.toFixed(2)}%`,
-          `ERROR: Network latency detected. Progress: ${progress.toFixed(2)}%`,
-          `DEBUG: Memory allocation successful. Progress: ${progress.toFixed(2)}%`,
-          `TRACE: Entering phase ${progress.toFixed(2)}. Progress: ${progress.toFixed(2)}%`
-        ];
-        return logs[Math.floor(Math.random() * logs.length)];
-      }
-      return new Promise<ProgressResult>((resolve) => {
-        const elapsedTime = (Date.now() - startTime) / 1000;
-        const progress = Math.min((elapsedTime / DEFAULT_DURATION) * 100, 100);
-        data.duration = parseFloat(elapsedTime.toFixed(2));
-        data.progress = parseFloat(progress.toFixed(2));
-        const randomLog = generateRandomLog(progress);
-        const logTime = new Date().toISOString();
-        data.logs[logTime] = randomLog;
-        if (progress >= 100) {
-          data.phase = 'completed';
-        }
-        resolve(data)
-      });
-    },
-    async getTestResult(uuid: string): Promise<FinResult> {
-      console.log('uuid:', uuid)
-      const data = await import('@/mock/result-mock.json');
-      return data
+        num_lines: 0,
+        phase: '',
+        runtime: 0,
+        operations: 0,
+        throughput: 0,
+        logs: []
+      })
+      this.updateResult({
+        "total_duration": 0,
+        "total_count": 0,
+        "query_on_time": 0,
+        "throughput": 0,
+        "all_metrics": []
+      })
+      const res = resetAll()
+      return res
     },
     updateDataInfo(newDataInfo: { data: string }) {
       this.dataInfo = newDataInfo;
@@ -132,10 +137,14 @@ export const useRunviewStore = defineStore('runview', {
       this.systemStatus = newSystemStatus
       localStorage.setItem('graphbench_systemStatus', JSON.stringify(newSystemStatus))
     },
-    updateProgressResult(newProgressResult: ProgressResult, isInit?: boolean) {
-      let logs = { ...this.progressResult.logs, ...newProgressResult.logs }
-      if (isInit) {
-        logs = {}
+    updateProgressResult(newProgressResult: ProgressResult) {
+      let n = newProgressResult.num_lines - this.progressResult.num_lines
+      let logs: any[] = []
+      if (newProgressResult.num_lines > 0 && n > 0) {
+        logs = [...this.progressResult.logs, ...newProgressResult.logs.slice(-n)]
+      } else {
+        let data_logs = newProgressResult.logs || []
+        logs = [...data_logs]
       }
       newProgressResult.logs = logs
       this.progressResult = newProgressResult
@@ -144,6 +153,9 @@ export const useRunviewStore = defineStore('runview', {
     updateResult(newResult: FinResult) {
       this.result = newResult
       localStorage.setItem('graphbench_result', JSON.stringify(newResult))
+    },
+    updateIsReseting(status: boolean) {
+      this.isReseting = status
     }
   }
 });

@@ -4,8 +4,8 @@
         <div class="modeinfo-container">
             <div class="select-mode">
                 <el-select v-model="mode">
-                    <el-option value="validate" label="validate">正确性验证</el-option>
-                    <el-option value="benchmark" label="benchmark">性能测试</el-option>
+                    <el-option value="validate" label="正确性验证">正确性验证</el-option>
+                    <el-option value="benchmark" label="性能测试">性能测试</el-option>
                 </el-select>
             </div>
             <template v-if="mode === 'benchmark'">
@@ -25,9 +25,8 @@
                 </div>
             </template>
             <div class="star-btn">
-                <el-button type="warning"
-                    :disabled="runviewStore.systemStatus.uuid && runviewStore.progressResult.phase !== 'completed' ? true : false"
-                    @click="start">启 动</el-button>
+                <el-button type="warning" :disabled="runviewStore.systemStatus.uuid ? true : false"
+                    @click="start">启动</el-button>
             </div>
         </div>
     </div>
@@ -56,18 +55,21 @@ async function start() {
     let res = await runviewStore.startTest(runviewStore.modeInfo)
     if (res.uuid) {
         runviewStore.updateSystemStatus({ uuid: res.uuid })
-    } else {
-        runviewStore.updateSystemStatus({ uuid: 'test_uuid' })
     }
 }
 function clear() {
     let initData = {
-        "phase": "",
+        "status": "",
         "duration": 0,
         "progress": 0,
-        "logs": {}
+        "logs": [],
+        "num_lines": 0,
+        "phase": '',
+        runtime: 0,
+        operations: 0,
+        throughput: 0,
     }
-    runviewStore.updateProgressResult(initData, true);
+    runviewStore.updateProgressResult(initData);
 }
 </script>
 

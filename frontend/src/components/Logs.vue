@@ -11,12 +11,12 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, computed,watch,nextTick } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import { useRunviewStore } from '@/stores/runview';
 const runviewStore = useRunviewStore()
 const logsContainer = ref<HTMLDivElement | null>(null);
 let logs = computed(() => runviewStore.progressResult.logs)
-watch(logs,async () => {
+watch(logs, async () => {
     await nextTick();
     if (logsContainer.value) {
         logsContainer.value.scrollTop = logsContainer.value.scrollHeight;
@@ -26,9 +26,10 @@ watch(logs,async () => {
 
 <style scoped lang="less">
 .logs {
-    padding: 0 1.875rem 0.875rem 1.875rem;
-    width: calc(100% - 3.75rem);
-    .logs-title{
+    width: 100%;
+    height: 100%;
+
+    .logs-title {
         display: flex;
         align-items: center;
         font-weight: 700;
@@ -37,14 +38,16 @@ watch(logs,async () => {
         font-size: 1.125rem;
         margin-bottom: 0.625rem;
     }
-    .logs-container{
-        height: 300px;
+
+    .logs-container {
+        height: calc(100% - 60px);
         background-color: #333333;
         border-radius: 0.5rem;
-        overflow-y:auto;
-        >.log-entry{
-            color:#FFD700;
-            padding:0.25rem 0.625rem ;
+        overflow-y: auto;
+
+        >.log-entry {
+            color: #FFD700;
+            padding: 0.25rem 0.625rem;
         }
     }
 }

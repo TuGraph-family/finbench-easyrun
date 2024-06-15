@@ -31,22 +31,27 @@ interface ValidateInfo {
 export type ModeInfo = BenchmarkInfo | ValidateInfo;
 
 // 数据列表
-export  type DataList = Array<string>
+export type DataList = Array<string>
 
 
 // 进度结果
 
-export type ProgressResult =  {
-    "phase":string,
-    "duration":number,
-    "progress":number,
-    "logs":{[key: string]: string}
+export type ProgressResult = {
+    "status": string,
+    "duration": number,
+    "progress": number,
+    "num_lines": number,
+    "phase": string,
+    "runtime": number,
+    "operations": number,
+    "throughput": number,
+    "logs": Array<string>
 }
 
 // 系统状态
 
 export type SystemStatus = {
-    "uuid":string
+    "uuid": string
 }
 
 // 测试结果
@@ -73,10 +78,9 @@ interface Detail {
 }
 
 export interface FinResult {
-    "duration": number,
-    "warmup": number,
-    "ops": number,
+    "total_duration": number,
+    "total_count": number,
     "query_on_time": number,
     "throughput": number,
-    "detail":Array<Detail>
+    "all_metrics": Array<Detail>
 }

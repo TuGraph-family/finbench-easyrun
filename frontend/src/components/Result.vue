@@ -1,10 +1,10 @@
 <template>
     <div class="finbench-result">
         <div class="performance-result">
-            <div>
+            <div style="width: 18.75rem;">
                 <Performance />
             </div>
-            <div>
+            <div style="flex-grow: 1;height: 100%;">
                 <Pie />
             </div>
         </div>
@@ -44,6 +44,7 @@ watch(result, () => {
 
 <style scoped lang="less">
 .finbench-result {
+
     .performance-result,
     .performance-CR,
     .performance-SR,
@@ -52,7 +53,12 @@ watch(result, () => {
         border: 5px solid #ddd;
         border-radius: 8px;
         margin-top: 20px;
-        background-color: #100c2a;
+        background-color: #333333;
+    }
+
+    .performance-result {
+        display: flex;
+
     }
 }
 </style>

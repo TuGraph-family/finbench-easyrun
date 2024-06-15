@@ -2,11 +2,11 @@
     <div class="performance">
         <div class="performance-title">性能测试结果</div>
         <div class="performance-list">
-            <div>测试耗时：{{ result?.duration }} </div>
-            <div>热身查询数：{{ result?.warmup }}</div>
-            <div>总查询数：{{ result?.ops }} </div>
-            <div>及时率：{{ result?.query_on_time }} </div>
-            <div>性能吞吐：{{ result?.throughput }} </div>
+            <el-tag>测试耗时：{{ (result?.total_duration / 1000000).toFixed(2) }} 秒 </el-tag>
+            <!-- <div>热身查询数：{{ result?.warmup }}</div> -->
+            <el-tag>总查询数：{{ Math.round(result?.total_count) }} 个 </el-tag>
+            <!-- <div>及时率：{{ Math.round(result?.query_on_time || 0) }} </div> -->
+            <el-tag>性能吞吐：{{ (result?.throughput).toFixed(2) }} QPS</el-tag>
         </div>
     </div>
 
@@ -35,10 +35,12 @@ let result = computed(() => runviewStore.result)
 
     .performance-list {
         display: flex;
+        flex-direction: column;
 
-        >div {
-            flex: 1;
-            line-height: 50px;
+        .el-tag {
+            height: 3.125rem;
+            margin-top: 0.625rem;
+            font-size: 0.9rem;
         }
     }
 
