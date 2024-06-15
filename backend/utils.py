@@ -37,8 +37,8 @@ def start_validate():
     return p
 
 def start_benchmark(op_count, tcr):
-    cmd_tmpl = 'docker exec -it {} bash /root/scripts/sf10_benchmark.sh'
-    p = subprocess.run(cmd_tmpl.format(server.FINBENCH_DOCKER), shell=True)
+    cmd_tmpl = 'docker exec -it {} bash /root/scripts/sf10_benchmark.sh {} {}'
+    p = subprocess.run(cmd_tmpl.format(server.FINBENCH_DOCKER, op_count, tcr), shell=True)
     return p
   
 def clean_log():

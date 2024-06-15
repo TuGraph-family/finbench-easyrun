@@ -1,2 +1,4 @@
 lgraph.pid
 *.log
+tmp.py
+*.json

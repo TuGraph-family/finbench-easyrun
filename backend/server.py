@@ -16,6 +16,11 @@ current_dataset = None
 current_status = None
 current_phase = None
 current_msg = None
+last_runtime = "00:00:00"
+last_operations = 0
+last_throughput = 0
+last_progress = 0.0
+target_ops = None
 async_process = None
 
 logger = app.logger
