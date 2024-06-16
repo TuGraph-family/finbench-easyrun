@@ -1,5 +1,5 @@
 const HEADERCONFIG = {
-    imageName:'cstc.svg',
+    imageName:'cstc.png',
     headerName:'GraphDBBench'
 }
 
