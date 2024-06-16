@@ -5,7 +5,7 @@
 @File    : backend
 '''
 
-from flask import Flask, request
+from flask import Flask, request, send_file, send_from_directory
 from flask_cors import CORS
 import os
 import re
@@ -270,6 +270,22 @@ def reset_all():
     utils.start_finbench_dockers()
     utils.clean_log()
     return wrap_data(RESPONSE_OK)
+
+# frontend static files
+@app.route('/')
+def serve_index():
+    """Serve the index.html file."""
+    return send_file('static/index.html')
+
+@app.route('/assets/<path:path>')
+def serve_static_files(path):
+    """Serve static files."""
+    return send_from_directory('static/assets', path)
+
+@app.route('/<path:path>')
+def catch_all(path):
+    """Serve the index.html file for any other route to support SPA routing."""
+    return send_file('static/index.html')
 
 
 def server_init():
