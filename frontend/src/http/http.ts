@@ -1,4 +1,4 @@
-const baseUrl = 'http://47.105.57.86:5000/'
+const baseUrl = 'http://127.0.0.1:5000/'
 
 // 定义接口以方便后续扩展和类型安全
 interface RequestOptions {
