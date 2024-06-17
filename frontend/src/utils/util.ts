@@ -1,5 +1,4 @@
-
-export const getAssetsFile = (dirName:string,fileName:string):string => {
-    const url = `../assets/${dirName ? dirName + '/' : ''}${fileName}`
-    return new URL(url,import.meta.url).toString()
+export const getAssetsFile = (dirName: string, fileName: string): string => {
+    const url = new URL(`../assets/${dirName ? dirName + '/' : ''}${fileName}`, import.meta.url).href
+    return url
 }

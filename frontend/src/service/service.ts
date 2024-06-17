@@ -41,7 +41,7 @@ export async function result(uuid: string) {
 }
 
 export async function resetAll() {
-    const endpoint = '/reset_all'
+    const endpoint = 'reset_all'
     const res: any = await httpClient.post(endpoint)
     return res.data
 }
