@@ -5,7 +5,7 @@
 [submodule "deps/ldbc_finbench_transaction_impls"]
 	path = docker/deps/ldbc_finbench_transaction_impls
 	url = https://github.com/TuGraph-family/ldbc_finbench_transaction_impls.git
-	branch = dev_tugraph
+	branch = main
 [submodule "deps/tugraph-db"]
 	path = docker/deps/tugraph-db
 	url = https://github.com/TuGraph-family/tugraph-db.git
