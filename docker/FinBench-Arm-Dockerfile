@@ -1,4 +1,39 @@
-FROM tugraph/tugraph-compile-arm64v8-centos7:1.2.7
+FROM arm64v8/centos:8.4.2105
+
+RUN sed -e "s|^mirrorlist=|#mirrorlist=|g" \
+     -e "s|^#baseurl=http://mirror.centos.org/\$contentdir/\$releasever|baseurl=https://mirrors.aliyun.com/centos-vault/8.4.2105|g" -i.bak /etc/yum.repos.d/CentOS-*.repo
+
+RUN yum -x filesystem update -y && yum install -y \
+     git \
+     gcc \
+     gcc-c++ \
+     make \
+     wget \
+     bzip2 \
+     openssl-static \
+     libtool \
+     libtool-ltdl \
+     libtool-ltdl-devel \
+     unzip \
+     byacc \
+     libuuid-devel \
+     rpm-build \
+     rpmdevtools \
+     rpmdev-setuptree \
+     autoconf \
+     automake \
+     libtoolize \
+     texinfo \
+     java-1.8.0-openjdk* \
+     perl-Digest-MD5 \
+     libcurl-devel.x86_64 \
+     kde-l10n-Chinese \
+     glibc-common \
+     which \
+     java-11-openjdk-devel \
+     python3
+
+RUN pip3 install requests
 
 RUN mkdir -p /data \
      && mkdir -p /root/ldbc/ldbc_finbench_driver \

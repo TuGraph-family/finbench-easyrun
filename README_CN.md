@@ -4,7 +4,7 @@
 
 ## 环境要求
 
-- x86 CPU
+- x86/arm CPU
 - 已安装Docker和Docker compose环境，可运行Docker compose命令
 
 ## 使用说明
@@ -13,11 +13,13 @@
 - 功能验证部分
 - 性能验证部分
 
-### 准备数据
+## 准备数据
+
+数据生成是非必须的操作，可以通过`datasets/prepare_datasets.sh`直接下载预先生成好的数据。
 
 使用生成好的数据集，参考“下载数据”章节，如果需要重新生成数据，参考“生成数据”章节
 
-#### 生成数据
+### 生成数据(非必须)
 
 进入 `docker/deps/ldbc_finbench_datagen` 目录，
 
@@ -27,24 +29,37 @@
 
 注：修改`--scale-factor`参数可以调整生成数据集的目标规模
 
-#### 下载数据
+### 下载数据
 
 开始测试前，需要准备好测试数据`SF1`和`SF10`，下载使用`prepare_datasets.sh`脚本，会在`datasets/`目录下下载测试数据，并进
 行md5校验和数据的解压缩。
 
-### 启动容器
+## 开始运行
+
+### 白屏化页面运行
+
+`backend`和`frontend`下面开发了一个简单的前后端供页面化操作Benchmark的执行
+
+- 进入`backend`目录
+- 静态链接静态资源：执行`ln -s ../frontend/dist ./static`
+- 启动后端程序：`python3 backend.py`
+- 打开终端提示的端口，根据页面进行操作
+
+注：每次运行功能验证和性能验证前，需要重置整个系统，点击设置->重置系统
+
+### 手动操作容器运行
+
+#### 启动容器
 
 使用如下命令，启动测试用容器。容器的配置详见`docker-compose.yml`
 ```
 docker-compose up -d
 ```
-容器启动后，会看到以下两个容器：
-- finbench-easyrun_tugraph_1
-- finbench-easyrun_finbench_1
+容器启动后，会看到以下两个容器：`finbench-easyrun_tugraph_1`和`finbench-easyrun_finbench_1`
 
 注：关于Docker构建，参考`TuGraphDB-Cent8-Dockerfile`和`FinBench-Cent8-Dockerfile`中的内容
 
-### 功能验证部分
+#### 功能验证
 
 数据正确下载后，开始进行功能验证。功能验证基于小规模SF1数据集，需要使用如下脚本
 
@@ -53,7 +68,7 @@ docker-compose up -d
 - 安装Cpp插件：在`finbench-easyrun_finbench_1`容器的`/root/scripts`目录下，执行`load_procedure.sh`
 - 进行功能验证：在`finbench-easyrun_finbench_1`容器的`/root/scripts`目录下，执行`sf1_validate.sh`
 
-### 性能验证部分
+#### 性能验证
 
 性能验证基于大规模SF10数据集，需要使用如下脚本
 
@@ -62,8 +77,8 @@ docker-compose up -d
 - 安装Cpp插件：在`finbench-easyrun_finbench_1`容器的`/root/scripts`目录下，执行`load_procedure.sh`
 - 进行性能测试：在`finbench-easyrun_finbench_1`容器的`/root/scripts`目录下，执行`sf10_benchmark.sh`
 
-### FAQ
+## FAQ
 
 - Q: 报错`<jemalloc>: Unsupported system page size`问题
-- A: CPU兼容性问题，需要在该机器上重新编译TuGraph程序
+- A: Arm CPU兼容性问题，大部分Arm机器的PageSize并非4K，需要在该机器上重新编译TuGraph程序，参考`docker/TuGraphDB-Arm-Dockerfile`
 
