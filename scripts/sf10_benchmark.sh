@@ -1,6 +1,6 @@
 # benchmarking on SF10 dataset
-OP_COUNT=$1
-TCR=$2
+OP_COUNT=${1:-'1000'}
+TCR=${2:-'0.1'}
 
 cd /root/ldbc/ldbc_finbench_transaction_impls/tugraph/
 
@@ -16,11 +16,11 @@ sed -i 's/172.21.189.228/tugraph/g'  benchmark.properties
 
 # update operations config
 WARMUP_COUNT=$(($OP_COUNT/4))
-sed -i "s/1800000/$OP_COUNT/g" benchmark.properties
-sed -i "s/450000/$WARMUP_COUNT/g" benchmark.properties
+sed -i "s/^operation_count=.*$/operation_count=$OP_COUNT/g" benchmark.properties
+sed -i "s/^warmup=.*$/warmup=$WARMUP_COUNT/g" benchmark.properties
 
 # update tcr config
-sed -i "s/0.1/$TCR/g" benchmark.properties
+sed -i "s/^time_compression_ratio=.*$/time_compression_ratio=$TCR/g" benchmark.properties
 
 # run and record it to a log file in /root/script
 bash run.sh benchmark.properties > /root/scripts/benchmark_sf10.log

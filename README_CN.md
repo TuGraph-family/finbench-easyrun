@@ -75,7 +75,7 @@ docker-compose up -d
 - 导入大规模数据：在`finbench-easyrun_tugraph_1`容器的`/root/scripts`目录下，执行`sf10_import.sh`
 - 启动tugraph_server：在`finbench-easyrun_tugraph_1`容器的`/root/scripts`目录下，执行`sf10_start.sh`
 - 安装Cpp插件：在`finbench-easyrun_finbench_1`容器的`/root/scripts`目录下，执行`load_procedure.sh`
-- 进行性能测试：在`finbench-easyrun_finbench_1`容器的`/root/scripts`目录下，执行`sf10_benchmark.sh`
+- 进行性能测试：在`finbench-easyrun_finbench_1`容器的`/root/scripts`目录下，执行`sf10_benchmark.sh`（目标查询数(operation count)默认为1000，时间压缩比(time compression ration)默认为0.1，可通过命令行参数指定，如`./sf10_benchmark.sh ${OP_COUNT} ${TCR}`）
 
 ## FAQ
 
